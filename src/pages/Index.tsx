@@ -5,6 +5,7 @@ import { Dashboard } from "@/components/Dashboard";
 import { TransactionList } from "@/components/TransactionList";
 import { BudgetOverview } from "@/components/BudgetOverview";
 import { Analytics } from "@/components/Analytics";
+import { CurrencyProvider } from "@/components/CurrencyProvider";
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -26,27 +27,29 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header 
-        onMenuClick={() => setSidebarOpen(!sidebarOpen)}
-        sidebarOpen={sidebarOpen}
-      />
-      
-      <div className="flex">
-        <Sidebar 
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
-          isOpen={sidebarOpen}
-          onClose={() => setSidebarOpen(false)}
+    <CurrencyProvider>
+      <div className="min-h-screen bg-background">
+        <Header 
+          onMenuClick={() => setSidebarOpen(!sidebarOpen)}
+          sidebarOpen={sidebarOpen}
         />
         
-        <main className="flex-1 p-4 md:p-6 lg:p-8 ml-0 md:ml-64 transition-all duration-300">
-          <div className="animate-fade-in">
-            {renderContent()}
-          </div>
-        </main>
+        <div className="flex">
+          <Sidebar 
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            isOpen={sidebarOpen}
+            onClose={() => setSidebarOpen(false)}
+          />
+          
+          <main className="flex-1 p-4 md:p-6 lg:p-8 ml-0 md:ml-64 transition-all duration-300">
+            <div className="animate-fade-in">
+              {renderContent()}
+            </div>
+          </main>
+        </div>
       </div>
-    </div>
+    </CurrencyProvider>
   );
 };
 

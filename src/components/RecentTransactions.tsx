@@ -1,6 +1,7 @@
 import { ArrowUpRight, ArrowDownLeft, Calendar } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useCurrency } from "@/hooks/useCurrency";
 
 interface Transaction {
   id: string;
@@ -55,6 +56,8 @@ const recentTransactions: Transaction[] = [
 ];
 
 export const RecentTransactions = () => {
+  const { formatAmount } = useCurrency();
+  
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
@@ -96,7 +99,7 @@ export const RecentTransactions = () => {
                 <p className={`font-semibold ${
                   transaction.type === "income" ? "text-success" : "text-destructive"
                 }`}>
-                  {transaction.type === "income" ? "+" : "-"}${transaction.amount.toFixed(2)}
+                  {transaction.type === "income" ? "+" : "-"}{formatAmount(transaction.amount)}
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {new Date(transaction.date).toLocaleDateString()}

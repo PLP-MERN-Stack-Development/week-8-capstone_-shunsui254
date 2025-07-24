@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useCurrency } from "@/hooks/useCurrency";
 
 interface Transaction {
   id: string;
@@ -66,6 +67,7 @@ const mockTransactions: Transaction[] = [
 ];
 
 export const TransactionList = () => {
+  const { formatAmount } = useCurrency();
   const [searchTerm, setSearchTerm] = useState("");
   const [transactions] = useState(mockTransactions);
 
@@ -147,7 +149,7 @@ export const TransactionList = () => {
                   <p className={`text-lg font-semibold ${
                     transaction.type === "income" ? "text-success" : "text-destructive"
                   }`}>
-                    {transaction.type === "income" ? "+" : "-"}${transaction.amount.toFixed(2)}
+                    {transaction.type === "income" ? "+" : "-"}{formatAmount(transaction.amount)}
                   </p>
                 </div>
               </div>

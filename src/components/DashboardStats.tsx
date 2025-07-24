@@ -1,5 +1,6 @@
 import { TrendingUp, TrendingDown, Wallet, PiggyBank } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useCurrency } from "@/hooks/useCurrency";
 
 interface StatCardProps {
   title: string;
@@ -35,10 +36,12 @@ const StatCard = ({ title, value, change, trend, icon, color }: StatCardProps) =
 );
 
 export const DashboardStats = () => {
+  const { formatAmount } = useCurrency();
+  
   const stats = [
     {
       title: "Total Balance",
-      value: "$12,845.32",
+      value: formatAmount(12845.32),
       change: "+8.2%",
       trend: "up" as const,
       icon: <Wallet className="h-4 w-4 text-white" />,
@@ -46,7 +49,7 @@ export const DashboardStats = () => {
     },
     {
       title: "Monthly Income",
-      value: "$5,420.00",
+      value: formatAmount(5420.00),
       change: "+12.5%",
       trend: "up" as const,
       icon: <TrendingUp className="h-4 w-4 text-white" />,
@@ -54,7 +57,7 @@ export const DashboardStats = () => {
     },
     {
       title: "Monthly Expenses",
-      value: "$3,287.45",
+      value: formatAmount(3287.45),
       change: "-5.3%",
       trend: "down" as const,
       icon: <TrendingDown className="h-4 w-4 text-white" />,
@@ -62,7 +65,7 @@ export const DashboardStats = () => {
     },
     {
       title: "Savings",
-      value: "$2,132.55",
+      value: formatAmount(2132.55),
       change: "+23.1%",
       trend: "up" as const,
       icon: <PiggyBank className="h-4 w-4 text-white" />,

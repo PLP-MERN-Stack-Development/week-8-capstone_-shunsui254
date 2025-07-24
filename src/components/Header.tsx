@@ -1,6 +1,7 @@
 import { Menu, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { CurrencySelector } from "@/components/CurrencySelector";
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -30,6 +31,7 @@ export const Header = ({ onMenuClick, sidebarOpen }: HeaderProps) => {
         </div>
         
         <div className="ml-auto flex items-center gap-2">
+          <CurrencySelector />
           <ThemeToggle />
         </div>
       </div>
