@@ -1,4 +1,4 @@
-import { LayoutDashboard, Receipt, PiggyBank, BarChart3, X } from "lucide-react";
+import { LayoutDashboard, Receipt, PiggyBank, BarChart3, DollarSign, Info, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -13,7 +13,9 @@ const navigation = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
   { id: "transactions", label: "Transactions", icon: Receipt },
   { id: "budgets", label: "Budgets", icon: PiggyBank },
+  { id: "currency", label: "Currency", icon: DollarSign },
   { id: "analytics", label: "Analytics", icon: BarChart3 },
+  { id: "about", label: "About", icon: Info },
 ];
 
 export const Sidebar = ({ activeTab, onTabChange, isOpen, onClose }: SidebarProps) => {

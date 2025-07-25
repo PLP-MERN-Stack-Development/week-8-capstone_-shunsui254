@@ -8,18 +8,29 @@ export interface Currency {
 
 export const CURRENCIES: Currency[] = [
   { code: "USD", symbol: "$", name: "US Dollar" },
-  { code: "KES", symbol: "KSh", name: "Kenyan Shilling" },
-  { code: "AUD", symbol: "A$", name: "Australian Dollar" },
-  { code: "ZAR", symbol: "R", name: "South African Rand" },
   { code: "EUR", symbol: "€", name: "Euro" },
-  { code: "INR", symbol: "₹", name: "Indian Rupee" },
   { code: "GBP", symbol: "£", name: "British Pound" },
+  { code: "JPY", symbol: "¥", name: "Japanese Yen" },
+  { code: "CAD", symbol: "C$", name: "Canadian Dollar" },
+  { code: "AUD", symbol: "A$", name: "Australian Dollar" },
+  { code: "CHF", symbol: "CHF", name: "Swiss Franc" },
+  { code: "CNY", symbol: "¥", name: "Chinese Yuan" },
+  { code: "INR", symbol: "₹", name: "Indian Rupee" },
+  { code: "KES", symbol: "KSh", name: "Kenyan Shilling" },
+  { code: "ZAR", symbol: "R", name: "South African Rand" },
+  { code: "NGN", symbol: "₦", name: "Nigerian Naira" },
 ];
 
 export interface CurrencyContextType {
   currentCurrency: Currency;
   setCurrency: (currency: Currency) => void;
-  formatAmount: (amount: number) => string;
+  formatAmount: (amount: number, currencyCode?: string) => string;
+  convertAmount: (amount: number, fromCurrency: string, toCurrency: string) => number;
+  getConvertedAmount: (amount: number, fromCurrency: string) => number;
+  loading: boolean;
+  error: string | null;
+  lastUpdated: Date | null;
+  refreshRates: () => void;
 }
 
 export const CurrencyContext = createContext<CurrencyContextType | undefined>(undefined);

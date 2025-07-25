@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Plus, Search, Filter, ArrowUpRight, ArrowDownLeft } from "lucide-react";
+import { Search, Filter, ArrowUpRight, ArrowDownLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useCurrency } from "@/hooks/useCurrency";
+import { AddTransactionDialog } from "@/components/AddTransactionDialog";
 
 interface Transaction {
   id: string;
@@ -13,6 +14,7 @@ interface Transaction {
   description: string;
   category: string;
   date: string;
+  currency?: string; // Default to USD if not specified
 }
 
 const mockTransactions: Transaction[] = [
@@ -20,31 +22,31 @@ const mockTransactions: Transaction[] = [
     id: "1",
     type: "income",
     amount: 3200,
-    description: "Salary Payment",
+    description: "Freelance Web Development",
     category: "Work",
-    date: "2024-01-15",
+    date: "2025-07-25",
   },
   {
     id: "2",
     type: "expense",
     amount: 45.50,
-    description: "Grocery Shopping",
+    description: "Coffee & Lunch - Dev Session",
     category: "Food & Dining",
-    date: "2024-01-14",
+    date: "2025-07-24",
   },
   {
     id: "3",
     type: "expense",
     amount: 120,
-    description: "Gas Station",
-    category: "Transportation",
-    date: "2024-01-13",
+    description: "GitHub Copilot Pro Subscription",
+    category: "Software & Tools",
+    date: "2025-07-23",
   },
   {
     id: "4",
     type: "expense",
     amount: 25.99,
-    description: "Netflix Subscription",
+    description: "Spotify Premium",
     category: "Entertainment",
     date: "2024-01-12",
   },
@@ -67,7 +69,7 @@ const mockTransactions: Transaction[] = [
 ];
 
 export const TransactionList = () => {
-  const { formatAmount } = useCurrency();
+  const { formatAmount, getConvertedAmount } = useCurrency();
   const [searchTerm, setSearchTerm] = useState("");
   const [transactions] = useState(mockTransactions);
 
@@ -83,10 +85,7 @@ export const TransactionList = () => {
           <h1 className="text-3xl font-bold text-foreground">Transactions</h1>
           <p className="text-muted-foreground">Manage your income and expenses</p>
         </div>
-        <Button className="gap-2">
-          <Plus className="h-4 w-4" />
-          Add Transaction
-        </Button>
+        <AddTransactionDialog />
       </div>
 
       <Card>
@@ -109,7 +108,12 @@ export const TransactionList = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {filteredTransactions.map((transaction, index) => (
+            {filteredTransactions.map((transaction, index) => {
+              // Convert from transaction currency (default to USD) to current currency
+              const baseCurrency = transaction.currency || 'USD';
+              const convertedAmount = getConvertedAmount(transaction.amount, baseCurrency);
+              
+              return (
               <div
                 key={transaction.id}
                 className="flex items-center justify-between p-4 rounded-lg border bg-card/50 hover:bg-card transition-colors cursor-pointer animate-fade-in"
@@ -149,11 +153,11 @@ export const TransactionList = () => {
                   <p className={`text-lg font-semibold ${
                     transaction.type === "income" ? "text-success" : "text-destructive"
                   }`}>
-                    {transaction.type === "income" ? "+" : "-"}{formatAmount(transaction.amount)}
+                    {transaction.type === "income" ? "+" : "-"}{formatAmount(convertedAmount)}
                   </p>
                 </div>
               </div>
-            ))}
+            )})}
           </div>
         </CardContent>
       </Card>

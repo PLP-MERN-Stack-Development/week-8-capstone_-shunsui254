@@ -10,6 +10,7 @@ interface Transaction {
   description: string;
   category: string;
   date: string;
+  currency?: string; // Default to USD if not specified
 }
 
 const recentTransactions: Transaction[] = [
@@ -17,46 +18,46 @@ const recentTransactions: Transaction[] = [
     id: "1",
     type: "income",
     amount: 3200,
-    description: "Salary Payment",
+    description: "Freelance Web Development",
     category: "Work",
-    date: "2024-01-15",
+    date: "2025-07-25",
   },
   {
     id: "2",
     type: "expense",
     amount: 45.50,
-    description: "Grocery Shopping",
+    description: "Coffee & Lunch - Dev Session",
     category: "Food & Dining",
-    date: "2024-01-14",
+    date: "2025-07-24",
   },
   {
     id: "3",
     type: "expense",
     amount: 120,
-    description: "Gas Station",
-    category: "Transportation",
-    date: "2024-01-13",
+    description: "GitHub Copilot Pro Subscription",
+    category: "Software & Tools",
+    date: "2025-07-23",
   },
   {
     id: "4",
     type: "expense",
     amount: 25.99,
-    description: "Netflix Subscription",
+    description: "Spotify Premium",
     category: "Entertainment",
-    date: "2024-01-12",
+    date: "2025-07-22",
   },
   {
     id: "5",
     type: "income",
     amount: 150,
-    description: "Freelance Work",
+    description: "Code Review & Consultation",
     category: "Side Income",
-    date: "2024-01-11",
+    date: "2025-07-21",
   },
 ];
 
 export const RecentTransactions = () => {
-  const { formatAmount } = useCurrency();
+  const { formatAmount, getConvertedAmount } = useCurrency();
   
   return (
     <Card>
@@ -71,7 +72,12 @@ export const RecentTransactions = () => {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {recentTransactions.map((transaction, index) => (
+          {recentTransactions.map((transaction, index) => {
+            // Convert from transaction currency (default to USD) to current currency
+            const baseCurrency = transaction.currency || 'USD';
+            const convertedAmount = getConvertedAmount(transaction.amount, baseCurrency);
+            
+            return (
             <div
               key={transaction.id}
               className="flex items-center justify-between p-3 rounded-lg border bg-card/50 hover:bg-card transition-colors animate-fade-in"
@@ -99,14 +105,14 @@ export const RecentTransactions = () => {
                 <p className={`font-semibold ${
                   transaction.type === "income" ? "text-success" : "text-destructive"
                 }`}>
-                  {transaction.type === "income" ? "+" : "-"}{formatAmount(transaction.amount)}
+                  {transaction.type === "income" ? "+" : "-"}{formatAmount(convertedAmount)}
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {new Date(transaction.date).toLocaleDateString()}
                 </p>
               </div>
             </div>
-          ))}
+          )})}
         </div>
       </CardContent>
     </Card>

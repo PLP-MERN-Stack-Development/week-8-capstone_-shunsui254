@@ -5,7 +5,11 @@ import { Dashboard } from "@/components/Dashboard";
 import { TransactionList } from "@/components/TransactionList";
 import { BudgetOverview } from "@/components/BudgetOverview";
 import { Analytics } from "@/components/Analytics";
+import { About } from "@/components/About";
 import { CurrencyProvider } from "@/components/CurrencyProvider";
+import { CurrencyDashboard } from "@/pages/CurrencyDashboard";
+import { CurrencyNotifications } from "@/components/CurrencyNotifications";
+import { Footer } from "@/components/Footer";
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -19,8 +23,12 @@ const Index = () => {
         return <TransactionList />;
       case "budgets":
         return <BudgetOverview />;
+      case "currency":
+        return <CurrencyDashboard />;
       case "analytics":
         return <Analytics />;
+      case "about":
+        return <About />;
       default:
         return <Dashboard />;
     }
@@ -48,6 +56,9 @@ const Index = () => {
             </div>
           </main>
         </div>
+        
+        <Footer />
+        <CurrencyNotifications />
       </div>
     </CurrencyProvider>
   );

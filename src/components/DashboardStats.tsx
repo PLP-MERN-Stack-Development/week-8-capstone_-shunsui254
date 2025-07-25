@@ -36,12 +36,20 @@ const StatCard = ({ title, value, change, trend, icon, color }: StatCardProps) =
 );
 
 export const DashboardStats = () => {
-  const { formatAmount } = useCurrency();
+  const { formatAmount, getConvertedAmount } = useCurrency();
+  
+  // Base amounts in USD (these would typically come from your backend/database)
+  const baseAmounts = {
+    totalBalance: 12845.32,
+    monthlyIncome: 5420.00,
+    monthlyExpenses: 3287.45,
+    savings: 2132.55
+  };
   
   const stats = [
     {
       title: "Total Balance",
-      value: formatAmount(12845.32),
+      value: formatAmount(getConvertedAmount(baseAmounts.totalBalance, 'USD')),
       change: "+8.2%",
       trend: "up" as const,
       icon: <Wallet className="h-4 w-4 text-white" />,
@@ -49,7 +57,7 @@ export const DashboardStats = () => {
     },
     {
       title: "Monthly Income",
-      value: formatAmount(5420.00),
+      value: formatAmount(getConvertedAmount(baseAmounts.monthlyIncome, 'USD')),
       change: "+12.5%",
       trend: "up" as const,
       icon: <TrendingUp className="h-4 w-4 text-white" />,
@@ -57,7 +65,7 @@ export const DashboardStats = () => {
     },
     {
       title: "Monthly Expenses",
-      value: formatAmount(3287.45),
+      value: formatAmount(getConvertedAmount(baseAmounts.monthlyExpenses, 'USD')),
       change: "-5.3%",
       trend: "down" as const,
       icon: <TrendingDown className="h-4 w-4 text-white" />,
@@ -65,7 +73,7 @@ export const DashboardStats = () => {
     },
     {
       title: "Savings",
-      value: formatAmount(2132.55),
+      value: formatAmount(getConvertedAmount(baseAmounts.savings, 'USD')),
       change: "+23.1%",
       trend: "up" as const,
       icon: <PiggyBank className="h-4 w-4 text-white" />,

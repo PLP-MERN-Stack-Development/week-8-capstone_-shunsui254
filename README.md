@@ -2,13 +2,18 @@
 
 A modern, responsive budget management application built with React, TypeScript, and Tailwind CSS.
 
+**Developed by Cecil Bezalel**
+
 ## Features
 
 - 📊 **Dashboard Overview**: Get a comprehensive view of your financial status
 - 💰 **Transaction Management**: Track income and expenses with detailed categorization
 - 📈 **Budget Planning**: Set and monitor budgets across different categories
 - 📊 **Analytics & Reports**: Visualize spending patterns with interactive charts
-- 🌍 **Multi-Currency Support**: Handle multiple currencies with real-time conversion
+- 🌍 **Multi-Currency Support**: Handle multiple currencies with real-time conversion rates
+- 🔔 **Currency Alerts**: Get notified when exchange rates hit your targets
+- 💱 **Currency Converter**: Convert between 12+ major currencies in real-time
+- 📈 **Rate History**: Track exchange rate trends over time
 - 🌙 **Dark/Light Theme**: Toggle between dark and light modes
 - 📱 **Responsive Design**: Optimized for desktop, tablet, and mobile devices
 
@@ -18,10 +23,20 @@ A modern, responsive budget management application built with React, TypeScript,
 - **Build Tool**: Vite
 - **Styling**: Tailwind CSS with custom design system
 - **UI Components**: shadcn/ui (Radix UI primitives)
+- **Exchange Rates**: ExchangeRate-API for real-time currency conversion
 - **Charts**: Recharts for data visualization
 - **State Management**: React Query (TanStack Query)
 - **Routing**: React Router DOM
 - **Icons**: Lucide React
+
+## About the Developer
+
+Cecil Bezalel is a passionate full-stack developer with expertise in modern web technologies and financial applications. With a keen eye for user experience and a deep understanding of financial workflows, Cecil has crafted MyBudgeteer to solve real-world budgeting challenges with elegance and efficiency.
+
+### Connect with Cecil
+- 💼 **LinkedIn**: [linkedin.com/in/cecilbezalel](https://linkedin.com/in/cecilbezalel)
+- 🐙 **GitHub**: [github.com/cecilbezalel](https://github.com/cecilbezalel)
+- 📧 **Email**: cecil.bezalel@gmail.com
 
 ## Getting Started
 
@@ -33,7 +48,7 @@ A modern, responsive budget management application built with React, TypeScript,
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/cecilbezalel/mybudgeteer.git
    cd mybudgeteer
    ```
 
@@ -47,7 +62,7 @@ A modern, responsive budget management application built with React, TypeScript,
    npm run dev
    ```
 
-4. Open your browser and navigate to `http://localhost:8080`
+4. Open your browser and navigate to `http://localhost:5173`
 
 ### Build for Production
 
