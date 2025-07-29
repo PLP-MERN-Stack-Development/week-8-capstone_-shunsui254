@@ -8,19 +8,25 @@ export const QuickActions = () => {
       title: "Add Income",
       icon: <ArrowUpRight className="h-4 w-4" />,
       variant: "default" as const,
-      action: () => console.log("Add income"),
+      action: () => {
+        // TODO: Implement add income functionality
+      },
     },
     {
       title: "Add Expense",
       icon: <ArrowDownLeft className="h-4 w-4" />,
       variant: "secondary" as const,
-      action: () => console.log("Add expense"),
+      action: () => {
+        // TODO: Implement add expense functionality
+      },
     },
     {
       title: "Set Budget",
       icon: <Target className="h-4 w-4" />,
       variant: "outline" as const,
-      action: () => console.log("Set budget"),
+      action: () => {
+        // TODO: Implement set budget functionality
+      },
     },
   ];
 

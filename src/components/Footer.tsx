@@ -1,4 +1,4 @@
-import { Heart, Github, Linkedin, Mail } from "lucide-react";
+import { Heart, Github, MessageCircle, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const Footer = () => {
@@ -20,7 +20,7 @@ export const Footer = () => {
               variant="ghost"
               size="sm"
               className="h-9 w-9 p-0"
-              onClick={() => window.open("https://github.com/cecilbezalel", "_blank")}
+              onClick={() => window.open("https://github.com/shunsui254", "_blank")}
             >
               <Github className="h-4 w-4" />
               <span className="sr-only">GitHub</span>
@@ -29,16 +29,16 @@ export const Footer = () => {
               variant="ghost"
               size="sm"
               className="h-9 w-9 p-0"
-              onClick={() => window.open("https://linkedin.com/in/cecilbezalel", "_blank")}
+              onClick={() => window.open("https://wa.me/254799350952", "_blank")}
             >
-              <Linkedin className="h-4 w-4" />
-              <span className="sr-only">LinkedIn</span>
+              <MessageCircle className="h-4 w-4" />
+              <span className="sr-only">WhatsApp</span>
             </Button>
             <Button
               variant="ghost"
               size="sm"
               className="h-9 w-9 p-0"
-              onClick={() => window.open("mailto:cecil.bezalel@gmail.com", "_blank")}
+              onClick={() => window.open("mailto:Cecilbezalel@gmail.com", "_blank")}
             >
               <Mail className="h-4 w-4" />
               <span className="sr-only">Email</span>

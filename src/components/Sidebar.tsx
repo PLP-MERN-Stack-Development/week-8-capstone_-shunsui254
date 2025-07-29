@@ -1,4 +1,4 @@
-import { LayoutDashboard, Receipt, PiggyBank, BarChart3, DollarSign, Info, X } from "lucide-react";
+import { LayoutDashboard, Receipt, PiggyBank, BarChart3, DollarSign, Info, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -7,6 +7,8 @@ interface SidebarProps {
   onTabChange: (tab: string) => void;
   isOpen: boolean;
   onClose: () => void;
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
 }
 
 const navigation = [
@@ -18,7 +20,7 @@ const navigation = [
   { id: "about", label: "About", icon: Info },
 ];
 
-export const Sidebar = ({ activeTab, onTabChange, isOpen, onClose }: SidebarProps) => {
+export const Sidebar = ({ activeTab, onTabChange, isOpen, onClose, isCollapsed = false, onToggleCollapse }: SidebarProps) => {
   return (
     <>
       {/* Mobile overlay */}
@@ -32,17 +34,39 @@ export const Sidebar = ({ activeTab, onTabChange, isOpen, onClose }: SidebarProp
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed left-0 top-14 z-50 h-[calc(100vh-3.5rem)] w-64 transform border-r bg-card transition-transform duration-300 md:translate-x-0",
-          isOpen ? "translate-x-0" : "-translate-x-full"
+          "fixed left-0 top-14 z-50 h-[calc(100vh-3.5rem)] transform border-r bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60 transition-all duration-300 md:translate-x-0",
+          isOpen ? "translate-x-0" : "-translate-x-full",
+          isCollapsed ? "md:w-16" : "md:w-64",
+          "w-64" // Mobile always full width when open
         )}
       >
         <div className="flex h-full flex-col">
-          {/* Mobile close button */}
-          <div className="flex items-center justify-between p-4 md:hidden">
-            <span className="text-sm font-medium">Menu</span>
-            <Button variant="ghost" size="icon" onClick={onClose}>
-              <X className="h-4 w-4" />
-            </Button>
+          {/* Mobile close button / Desktop collapse button */}
+          <div className="flex items-center justify-between p-4">
+            <span className={cn("text-sm font-medium", isCollapsed && "md:hidden", "md:block")}>
+              {!isCollapsed ? "Menu" : ""}
+            </span>
+            <div className="flex items-center gap-2">
+              {/* Desktop collapse toggle */}
+              {onToggleCollapse && (
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  onClick={onToggleCollapse}
+                  className="hidden md:flex"
+                >
+                  {isCollapsed ? (
+                    <ChevronRight className="h-4 w-4" />
+                  ) : (
+                    <ChevronLeft className="h-4 w-4" />
+                  )}
+                </Button>
+              )}
+              {/* Mobile close button */}
+              <Button variant="ghost" size="icon" onClick={onClose} className="md:hidden">
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
           
           {/* Navigation */}
@@ -61,11 +85,15 @@ export const Sidebar = ({ activeTab, onTabChange, isOpen, onClose }: SidebarProp
                         "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                         activeTab === item.id
                           ? "bg-primary text-primary-foreground"
-                          : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                          : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                        isCollapsed && "md:justify-center md:px-2"
                       )}
+                      title={isCollapsed ? item.label : undefined}
                     >
-                      <Icon className="h-4 w-4" />
-                      {item.label}
+                      <Icon className="h-4 w-4 flex-shrink-0" />
+                      <span className={cn(isCollapsed && "md:hidden")}>
+                        {item.label}
+                      </span>
                     </button>
                   </li>
                 );

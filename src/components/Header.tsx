@@ -1,5 +1,7 @@
-import { Menu, DollarSign, User } from "lucide-react";
+import { Menu, DollarSign, User, Settings, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { CurrencySelector } from "@/components/CurrencySelector";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -18,6 +20,34 @@ interface HeaderProps {
 }
 
 export const Header = ({ onMenuClick, sidebarOpen }: HeaderProps) => {
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
+  const handleProfileClick = () => {
+    toast({
+      title: "Profile",
+      description: "Profile settings coming soon! This will allow you to update your personal information and preferences.",
+    });
+  };
+
+  const handleAccountSettingsClick = () => {
+    toast({
+      title: "Account Settings",
+      description: "Account settings coming soon! This will allow you to manage your account preferences, security, and billing.",
+    });
+  };
+
+  const handleLogoutClick = () => {
+    toast({
+      title: "Logged out successfully",
+      description: "You have been successfully logged out. Redirecting to home page...",
+    });
+    // Clear any auth tokens/session data here in a real app
+    setTimeout(() => {
+      navigate("/");
+    }, 800);
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
       <div className="flex h-14 items-center px-4">
@@ -31,10 +61,10 @@ export const Header = ({ onMenuClick, sidebarOpen }: HeaderProps) => {
         </Button>
         
         <div className="flex items-center gap-2 ml-2 md:ml-0">
-          <div className="flex items-center justify-center w-8 h-8 bg-gradient-primary rounded-lg">
-            <DollarSign className="h-5 w-5 text-white" />
+          <div className="flex items-center justify-center w-8 h-8 rounded-lg">
+            <DollarSign className="h-5 w-5" />
           </div>
-          <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+          <h1 className="text-xl font-bold">
             MyBudgeteer
           </h1>
         </div>
@@ -58,21 +88,22 @@ export const Header = ({ onMenuClick, sidebarOpen }: HeaderProps) => {
                 <div className="flex flex-col space-y-1">
                   <p className="text-sm font-medium leading-none">Cecil Bezalel</p>
                   <p className="text-xs leading-none text-muted-foreground">
-                    cecil.bezalel@gmail.com
+                    Cecilbezalel@gmail.com
                   </p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={handleProfileClick}>
                 <User className="mr-2 h-4 w-4" />
                 <span>Profile</span>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <DollarSign className="mr-2 h-4 w-4" />
+              <DropdownMenuItem onClick={handleAccountSettingsClick}>
+                <Settings className="mr-2 h-4 w-4" />
                 <span>Account Settings</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogoutClick}>
+                <LogOut className="mr-2 h-4 w-4" />
                 <span>Log out</span>
               </DropdownMenuItem>
             </DropdownMenuContent>

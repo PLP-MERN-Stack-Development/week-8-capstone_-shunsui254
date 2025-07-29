@@ -30,13 +30,12 @@ A modern, responsive budget management application built with React, TypeScript,
 - **Icons**: Lucide React
 
 ## About the Developer
-
-Cecil Bezalel is a passionate full-stack developer with expertise in modern web technologies and financial applications. With a keen eye for user experience and a deep understanding of financial workflows, Cecil has crafted MyBudgeteer to solve real-world budgeting challenges with elegance and efficiency.
+I'm a passionate full-stack developer with a love for building modern web applications that make a real difference. My focus on user experience and deep understanding of financial workflows inspired me to create MyBudgeteer—a tool designed to help you take control of your finances with ease and confidence. I hope you find it as useful and enjoyable to use as I did building it!
 
 ### Connect with Cecil
-- 💼 **LinkedIn**: [linkedin.com/in/cecilbezalel](https://linkedin.com/in/cecilbezalel)
-- 🐙 **GitHub**: [github.com/cecilbezalel](https://github.com/cecilbezalel)
-- 📧 **Email**: cecil.bezalel@gmail.com
+- � **GitHub**: [github.com/shunsui254](https://github.com/shunsui254)
+- � **WhatsApp**: [+254799350952](https://wa.me/254799350952)
+- 📧 **Email**: Cecilbezalel@gmail.com
 
 ## Getting Started
 
@@ -48,7 +47,7 @@ Cecil Bezalel is a passionate full-stack developer with expertise in modern web 
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/cecilbezalel/mybudgeteer.git
+   git clone https://github.com/shunsui254/mybudgeteer.git
    cd mybudgeteer
    ```
 

@@ -70,11 +70,23 @@ export const About = () => {
               </div>
             </div>
             
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              Cecil Bezalel is a passionate developer with expertise in modern web technologies and financial applications. 
-              With a keen eye for user experience and a deep understanding of financial workflows, Cecil has crafted 
-              MyBudgeteer to solve real-world budgeting challenges with elegance and efficiency.
-            </p>
+            <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
+              <p>
+                Hi there! I'm Cecil Bezalel, and I pour my heart into creating tools that simplify life. With a knack for modern web technologies and a real-world grasp of money matters, I've crafted MyBudgeteer to be your new budgeting best friend.
+              </p>
+              
+              <p>
+                I totally get it—budgeting can feel like a chore. That's why I've made MyBudgeteer as intuitive and user-friendly as possible. It's like having a financial advisor tucked right in your pocket, minus the steep fees. And it's not just easy; it's efficient too. I've obsessed over every detail so you can breeze through your budgeting tasks and get back to the things that light you up.
+              </p>
+              
+              <p>
+                When I'm not coding, I'm out exploring hiking trails or savoring a cup of coffee at my favorite local spot. I believe a great budget shouldn't tie you down—it should set you free to enjoy what you love. With MyBudgeteer, you're not just getting a tool; you're gaining a partner in financial wellness. My passion and know-how are woven into every feature, so you can trust that your financial journey is in caring, capable hands.
+              </p>
+              
+              <p className="font-medium text-foreground">
+                Ready to take control of your finances with ease? Give MyBudgeteer a try and see how it can transform your budgeting experience.
+              </p>
+            </div>
             
             <div className="flex flex-wrap gap-2">
               <Badge variant="secondary">React Expert</Badge>

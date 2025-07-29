@@ -11,7 +11,7 @@ interface CurrencyNotification {
   message: string;
   timestamp: Date;
   dismissed: boolean;
-  data?: any;
+  data?: Record<string, unknown>;
 }
 
 export const CurrencyNotifications = () => {
@@ -21,8 +21,9 @@ export const CurrencyNotifications = () => {
   useEffect(() => {
     // Add notification when exchange rates are updated
     if (lastUpdated) {
+      const notificationId = `rate_update_${Date.now()}`;
       const newNotification: CurrencyNotification = {
-        id: `rate_update_${Date.now()}`,
+        id: notificationId,
         type: "rate_update",
         title: "Exchange Rates Updated",
         message: `Latest rates for ${currentCurrency.code} have been fetched.`,
@@ -38,6 +39,11 @@ export const CurrencyNotifications = () => {
         );
         return [newNotification, ...filtered].slice(0, 5); // Keep only 5 notifications
       });
+
+      // Auto-dismiss the "Exchange Rates Updated" notification after 4 seconds
+      setTimeout(() => {
+        dismissNotification(notificationId);
+      }, 4000);
     }
   }, [lastUpdated, currentCurrency.code]);
 

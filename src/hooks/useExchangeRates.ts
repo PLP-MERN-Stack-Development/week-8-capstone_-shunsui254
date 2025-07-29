@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 export interface ExchangeRates {
   [currencyCode: string]: number;
@@ -22,7 +22,7 @@ export const useExchangeRates = (baseCurrency: string = 'USD') => {
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
-  const getCachedRates = (): ExchangeRateData | null => {
+  const getCachedRates = useCallback((): ExchangeRateData | null => {
     try {
       const cached = localStorage.getItem(STORAGE_KEY);
       if (cached) {
@@ -36,7 +36,7 @@ export const useExchangeRates = (baseCurrency: string = 'USD') => {
       console.error('Error reading cached exchange rates:', error);
     }
     return null;
-  };
+  }, [baseCurrency]);
 
   const setCachedRates = (rates: ExchangeRates, base: string) => {
     try {
@@ -51,7 +51,7 @@ export const useExchangeRates = (baseCurrency: string = 'USD') => {
     }
   };
 
-  const fetchExchangeRates = async () => {
+  const fetchExchangeRates = useCallback(async () => {
     setLoading(true);
     setError(null);
 
@@ -100,7 +100,7 @@ export const useExchangeRates = (baseCurrency: string = 'USD') => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [baseCurrency]);
 
   const convertAmount = (amount: number, fromCurrency: string, toCurrency: string): number => {
     if (fromCurrency === toCurrency) return amount;
@@ -140,7 +140,7 @@ export const useExchangeRates = (baseCurrency: string = 'USD') => {
 
   useEffect(() => {
     fetchExchangeRates();
-  }, [baseCurrency]);
+  }, [fetchExchangeRates]);
 
   return {
     exchangeRates,

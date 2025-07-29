@@ -51,12 +51,9 @@ export const AddTransactionDialog = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Here you would typically save to your backend/state
-    console.log("Transaction Data:", formData);
     
-    // Show converted amount
+    // Show converted amount for validation
     const convertedAmount = getConvertedAmount(parseFloat(formData.amount), formData.currency);
-    console.log(`Original: ${formData.amount} ${formData.currency}`);
-    console.log(`Converted: ${formatAmount(convertedAmount)}`);
     
     setOpen(false);
     // Reset form
