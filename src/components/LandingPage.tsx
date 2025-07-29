@@ -86,7 +86,7 @@ export const LandingPage = () => {
   ];
 
   const handleGetStarted = () => {
-    window.location.href = "/dashboard";
+    window.location.href = "/login";
   };
 
   const handleEmailSubmit = (e: React.FormEvent) => {

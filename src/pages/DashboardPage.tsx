@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Sidebar } from "@/components/Sidebar";
 import { Dashboard } from "@/components/Dashboard";
@@ -16,6 +17,15 @@ const DashboardPage = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const navigate = useNavigate();
+
+  const handleTabChange = (tab: string) => {
+    if (tab === "settings") {
+      navigate("/account-settings");
+      return;
+    }
+    setActiveTab(tab);
+  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -47,7 +57,7 @@ const DashboardPage = () => {
         <div className="flex">
           <Sidebar 
             activeTab={activeTab}
-            onTabChange={setActiveTab}
+            onTabChange={handleTabChange}
             isOpen={sidebarOpen}
             onClose={() => setSidebarOpen(false)}
             isCollapsed={sidebarCollapsed}

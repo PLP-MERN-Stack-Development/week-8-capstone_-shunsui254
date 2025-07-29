@@ -1,4 +1,4 @@
-import { LayoutDashboard, Receipt, PiggyBank, BarChart3, DollarSign, Info, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { LayoutDashboard, Receipt, PiggyBank, BarChart3, DollarSign, Info, X, ChevronLeft, ChevronRight, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -17,6 +17,7 @@ const navigation = [
   { id: "budgets", label: "Budgets", icon: PiggyBank },
   { id: "currency", label: "Currency", icon: DollarSign },
   { id: "analytics", label: "Analytics", icon: BarChart3 },
+  { id: "settings", label: "Account Settings", icon: Settings },
   { id: "about", label: "About", icon: Info },
 ];
 

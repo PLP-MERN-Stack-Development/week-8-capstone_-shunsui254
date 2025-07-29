@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useCurrency } from "@/hooks/useCurrency";
 import { AddTransactionDialog } from "@/components/AddTransactionDialog";
+import { demoTransactions } from "@/data/demoTransactions";
 
 interface Transaction {
   id: string;
@@ -17,56 +18,9 @@ interface Transaction {
   currency?: string; // Default to USD if not specified
 }
 
-const mockTransactions: Transaction[] = [
-  {
-    id: "1",
-    type: "income",
-    amount: 3200,
-    description: "Freelance Web Development",
-    category: "Work",
-    date: "2025-07-25",
-  },
-  {
-    id: "2",
-    type: "expense",
-    amount: 45.50,
-    description: "Coffee & Lunch - Dev Session",
-    category: "Food & Dining",
-    date: "2025-07-24",
-  },
-  {
-    id: "3",
-    type: "expense",
-    amount: 120,
-    description: "GitHub Copilot Pro Subscription",
-    category: "Software & Tools",
-    date: "2025-07-23",
-  },
-  {
-    id: "4",
-    type: "expense",
-    amount: 25.99,
-    description: "Spotify Premium",
-    category: "Entertainment",
-    date: "2024-01-12",
-  },
-  {
-    id: "5",
-    type: "income",
-    amount: 150,
-    description: "Freelance Work",
-    category: "Side Income",
-    date: "2024-01-11",
-  },
-  {
-    id: "6",
-    type: "expense",
-    amount: 89.99,
-    description: "Restaurant Dinner",
-    category: "Food & Dining",
-    date: "2024-01-10",
-  },
-];
+// Use all demo transactions sorted by date (newest first)
+const mockTransactions: Transaction[] = demoTransactions
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
 export const TransactionList = () => {
   const { formatAmount, getConvertedAmount } = useCurrency();

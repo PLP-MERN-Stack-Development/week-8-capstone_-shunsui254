@@ -100,7 +100,7 @@ export const useExchangeRates = (baseCurrency: string = 'USD') => {
     } finally {
       setLoading(false);
     }
-  }, [baseCurrency]);
+  }, [baseCurrency, getCachedRates]);
 
   const convertAmount = (amount: number, fromCurrency: string, toCurrency: string): number => {
     if (fromCurrency === toCurrency) return amount;

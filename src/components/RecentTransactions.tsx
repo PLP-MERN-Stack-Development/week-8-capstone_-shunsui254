@@ -1,7 +1,9 @@
-import { ArrowUpRight, ArrowDownLeft, Calendar } from "lucide-react";
+import { ArrowUpRight, ArrowDownLeft, Calendar, Plus } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useCurrency } from "@/hooks/useCurrency";
+import { isNewUser } from "@/lib/userUtils";
+import { demoTransactions } from "@/data/demoTransactions";
 
 interface Transaction {
   id: string;
@@ -13,51 +15,17 @@ interface Transaction {
   currency?: string; // Default to USD if not specified
 }
 
-const recentTransactions: Transaction[] = [
-  {
-    id: "1",
-    type: "income",
-    amount: 3200,
-    description: "Freelance Web Development",
-    category: "Work",
-    date: "2025-07-25",
-  },
-  {
-    id: "2",
-    type: "expense",
-    amount: 45.50,
-    description: "Coffee & Lunch - Dev Session",
-    category: "Food & Dining",
-    date: "2025-07-24",
-  },
-  {
-    id: "3",
-    type: "expense",
-    amount: 120,
-    description: "GitHub Copilot Pro Subscription",
-    category: "Software & Tools",
-    date: "2025-07-23",
-  },
-  {
-    id: "4",
-    type: "expense",
-    amount: 25.99,
-    description: "Spotify Premium",
-    category: "Entertainment",
-    date: "2025-07-22",
-  },
-  {
-    id: "5",
-    type: "income",
-    amount: 150,
-    description: "Code Review & Consultation",
-    category: "Side Income",
-    date: "2025-07-21",
-  },
-];
+// Get the most recent 5 transactions from the demo data
+const recentTransactions: Transaction[] = demoTransactions
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  .slice(0, 5);
 
 export const RecentTransactions = () => {
   const { formatAmount, getConvertedAmount } = useCurrency();
+  const newUser = isNewUser();
+  
+  // Show empty transactions for new users, demo data for demo accounts
+  const transactionsToShow = newUser ? [] : recentTransactions;
   
   return (
     <Card>
@@ -71,13 +39,28 @@ export const RecentTransactions = () => {
         </Button>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
-          {recentTransactions.map((transaction, index) => {
-            // Convert from transaction currency (default to USD) to current currency
-            const baseCurrency = transaction.currency || 'USD';
-            const convertedAmount = getConvertedAmount(transaction.amount, baseCurrency);
-            
-            return (
+        {transactionsToShow.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-8 text-center">
+            <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+              <Plus className="h-8 w-8 text-muted-foreground" />
+            </div>
+            <h3 className="text-lg font-medium mb-2">No transactions yet</h3>
+            <p className="text-muted-foreground text-sm mb-4">
+              Start tracking your finances by adding your first transaction
+            </p>
+            <Button size="sm">
+              <Plus className="h-4 w-4 mr-2" />
+              Add Transaction
+            </Button>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {transactionsToShow.map((transaction, index) => {
+              // Convert from transaction currency (default to USD) to current currency
+              const baseCurrency = transaction.currency || 'USD';
+              const convertedAmount = getConvertedAmount(transaction.amount, baseCurrency);
+              
+              return (
             <div
               key={transaction.id}
               className="flex items-center justify-between p-3 rounded-lg border bg-card/50 hover:bg-card transition-colors animate-fade-in"
@@ -113,7 +96,8 @@ export const RecentTransactions = () => {
               </div>
             </div>
           )})}
-        </div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

@@ -1,5 +1,8 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { TrendingUp, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { isNewUser } from "@/lib/userUtils";
 
 const data = [
   { name: "Food & Dining", value: 35, amount: 1149.50 },
@@ -46,52 +49,76 @@ const CustomTooltip = ({ active, payload }: TooltipProps) => {
 };
 
 export const SpendingChart = () => {
+  const newUser = isNewUser();
+  const dataToShow = newUser ? [] : data;
+  
   return (
     <Card className="shadow-card">
       <CardHeader>
-        <CardTitle>Spending Breakdown</CardTitle>
+        <CardTitle className="flex items-center gap-2">
+          <TrendingUp className="h-5 w-5" />
+          Spending Breakdown
+        </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="h-[300px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={data}
-                cx="50%"
-                cy="50%"
-                innerRadius={60}
-                outerRadius={100}
-                paddingAngle={2}
-                dataKey="value"
-                animationDuration={800}
-              >
-                {data.map((entry, index) => (
-                  <Cell 
-                    key={`cell-${index}`} 
-                    fill={COLORS[index % COLORS.length]}
-                    className="hover:opacity-80 transition-opacity"
-                  />
-                ))}
-              </Pie>
-              <Tooltip content={<CustomTooltip />} />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-        
-        <div className="mt-4 space-y-2">
-          {data.slice(0, 3).map((item, index) => (
-            <div key={item.name} className="flex items-center justify-between text-sm">
-              <div className="flex items-center gap-2">
-                <div 
-                  className="w-3 h-3 rounded-full" 
-                  style={{ backgroundColor: COLORS[index] }}
-                />
-                <span>{item.name}</span>
-              </div>
-              <span className="font-medium">${item.amount.toFixed(2)}</span>
+        {dataToShow.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-8 text-center">
+            <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+              <TrendingUp className="h-8 w-8 text-muted-foreground" />
             </div>
-          ))}
-        </div>
+            <h3 className="text-lg font-medium mb-2">No spending data yet</h3>
+            <p className="text-muted-foreground text-sm mb-4">
+              Add some transactions to see your spending breakdown
+            </p>
+            <Button size="sm">
+              <Plus className="h-4 w-4 mr-2" />
+              Add Transaction
+            </Button>
+          </div>
+        ) : (
+          <>
+            <div className="h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={dataToShow}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={100}
+                    paddingAngle={2}
+                    dataKey="value"
+                    animationDuration={800}
+                  >
+                    {dataToShow.map((entry, index) => (
+                      <Cell 
+                        key={`cell-${index}`} 
+                        fill={COLORS[index % COLORS.length]}
+                        className="hover:opacity-80 transition-opacity"
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip content={<CustomTooltip />} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            
+            <div className="mt-4 space-y-2">
+              {dataToShow.slice(0, 3).map((item, index) => (
+                <div key={item.name} className="flex items-center justify-between text-sm">
+                  <div className="flex items-center gap-2">
+                    <div 
+                      className="w-3 h-3 rounded-full" 
+                      style={{ backgroundColor: COLORS[index] }}
+                    />
+                    <span>{item.name}</span>
+                  </div>
+                  <span className="font-medium">${item.amount.toFixed(2)}</span>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
       </CardContent>
     </Card>
   );
