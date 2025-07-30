@@ -3,6 +3,9 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { isDemoAccount, isNewUser } from "@/lib/userUtils";
+import { Button } from "@/components/ui/button";
+import { BarChart3, Plus } from "lucide-react";
 
 const monthlyData = [
   { month: "Jan", income: 5200, expenses: 3400, savings: 1800 },
@@ -49,6 +52,40 @@ const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
 
 export const Analytics = () => {
   const [timeRange, setTimeRange] = useState("6months");
+  const demoUser = isDemoAccount();
+  const newUser = isNewUser();
+
+  // Only show demo data for demo accounts, new users get empty state
+  const shouldShowData = demoUser && !newUser;
+
+  if (!shouldShowData) {
+    return (
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-foreground">Analytics</h1>
+            <p className="text-muted-foreground">Detailed insights into your financial trends</p>
+          </div>
+        </div>
+
+        <Card>
+          <CardContent className="pt-6">
+            <div className="text-center py-12">
+              <BarChart3 className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-xl font-semibold mb-2">No Data to Analyze Yet</h3>
+              <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+                Start adding transactions and budgets to see detailed analytics and insights about your financial trends.
+              </p>
+              <Button className="gap-2">
+                <Plus className="h-4 w-4" />
+                Add Your First Transaction
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

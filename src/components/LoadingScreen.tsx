@@ -24,7 +24,7 @@ export const LoadingScreen = ({
         <div className="relative">
           <div className="absolute inset-0 animate-ping rounded-full bg-primary/20 scale-110" />
           <div className="relative flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 animate-pulse">
-            <DollarSign className="h-10 w-10 text-primary animate-bounce" />
+            <img src="/aikon.png" alt="MyBudgeteer Logo" className="h-12 w-12 animate-bounce" />
           </div>
         </div>
 

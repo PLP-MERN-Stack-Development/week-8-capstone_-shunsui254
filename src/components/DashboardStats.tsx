@@ -1,7 +1,7 @@
 import { TrendingUp, TrendingDown, Wallet, PiggyBank } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useCurrency } from "@/hooks/useCurrency";
-import { isNewUser } from "@/lib/userUtils";
+import { isNewUser, isDemoAccount } from "@/lib/userUtils";
 import { demoTransactions } from "@/data/demoTransactions";
 
 interface StatCardProps {
@@ -97,8 +97,8 @@ const calculateDemoStats = () => {
     monthlyIncome,
     monthlyExpenses,
     savings,
-    incomeChange: `${incomeChange > 0 ? "+" : ""}${incomeChange}%`,
-    expenseChange: `${expenseChange > 0 ? "+" : ""}${expenseChange}%`,
+    incomeChange: `${parseFloat(incomeChange) > 0 ? "+" : ""}${incomeChange}%`,
+    expenseChange: `${parseFloat(expenseChange) > 0 ? "+" : ""}${expenseChange}%`,
     balanceChange: `+${balanceChange}%`,
     savingsChange: `+${savingsChange}%`,
     incomeChangeTrend: parseFloat(incomeChange) >= 0 ? "up" as const : "down" as const,
@@ -109,27 +109,29 @@ const calculateDemoStats = () => {
 export const DashboardStats = () => {
   const { formatAmount, getConvertedAmount } = useCurrency();
   const newUser = isNewUser();
+  const demoUser = isDemoAccount();
   
-  // For new users, show zero amounts; for demo users, calculate from real transaction data
-  const demoStats = newUser ? null : calculateDemoStats();
+  // Only show demo data for demo accounts, new users get clean slate
+  const shouldShowDemoData = demoUser && !newUser;
+  const demoStats = shouldShowDemoData ? calculateDemoStats() : null;
   
-  const baseAmounts = newUser ? {
-    totalBalance: 0,
-    monthlyIncome: 0,
-    monthlyExpenses: 0,
-    savings: 0
-  } : {
+  const baseAmounts = shouldShowDemoData ? {
     totalBalance: demoStats!.totalBalance,
     monthlyIncome: demoStats!.monthlyIncome,
     monthlyExpenses: demoStats!.monthlyExpenses,
     savings: demoStats!.savings
+  } : {
+    totalBalance: 0,
+    monthlyIncome: 0,
+    monthlyExpenses: 0,
+    savings: 0
   };
   
   const stats = [
     {
       title: "Total Balance",
       value: formatAmount(getConvertedAmount(baseAmounts.totalBalance, 'USD')),
-      change: newUser ? "+0%" : demoStats!.balanceChange,
+      change: shouldShowDemoData ? demoStats!.balanceChange : "+0%",
       trend: "up" as const,
       icon: <Wallet className="h-4 w-4 text-white" />,
       color: "bg-gradient-primary",
@@ -137,23 +139,23 @@ export const DashboardStats = () => {
     {
       title: "Monthly Income",
       value: formatAmount(getConvertedAmount(baseAmounts.monthlyIncome, 'USD')),
-      change: newUser ? "+0%" : demoStats!.incomeChange,
-      trend: newUser ? "up" as const : demoStats!.incomeChangeTrend,
+      change: shouldShowDemoData ? demoStats!.incomeChange : "+0%",
+      trend: shouldShowDemoData ? demoStats!.incomeChangeTrend : "up" as const,
       icon: <TrendingUp className="h-4 w-4 text-white" />,
       color: "bg-gradient-success",
     },
     {
       title: "Monthly Expenses",
       value: formatAmount(getConvertedAmount(baseAmounts.monthlyExpenses, 'USD')),
-      change: newUser ? "+0%" : demoStats!.expenseChange,
-      trend: newUser ? "up" as const : demoStats!.expenseChangeTrend,
+      change: shouldShowDemoData ? demoStats!.expenseChange : "+0%",
+      trend: shouldShowDemoData ? demoStats!.expenseChangeTrend : "up" as const,
       icon: <TrendingDown className="h-4 w-4 text-white" />,
       color: "bg-expense",
     },
     {
       title: "Savings",
       value: formatAmount(getConvertedAmount(baseAmounts.savings, 'USD')),
-      change: newUser ? "+0%" : demoStats!.savingsChange,
+      change: shouldShowDemoData ? demoStats!.savingsChange : "+0%",
       trend: "up" as const,
       icon: <PiggyBank className="h-4 w-4 text-white" />,
       color: "bg-savings",

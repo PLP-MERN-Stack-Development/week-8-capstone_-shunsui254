@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { useCurrency } from "@/hooks/useCurrency";
 import { AddTransactionDialog } from "@/components/AddTransactionDialog";
 import { demoTransactions } from "@/data/demoTransactions";
+import { isDemoAccount, isNewUser } from "@/lib/userUtils";
 
 interface Transaction {
   id: string;
@@ -25,7 +26,13 @@ const mockTransactions: Transaction[] = demoTransactions
 export const TransactionList = () => {
   const { formatAmount, getConvertedAmount } = useCurrency();
   const [searchTerm, setSearchTerm] = useState("");
-  const [transactions] = useState(mockTransactions);
+  const demoUser = isDemoAccount();
+  const newUser = isNewUser();
+  
+  // Only show demo data for demo accounts, new users get empty list
+  const shouldShowDemoData = demoUser && !newUser;
+  const allTransactions = shouldShowDemoData ? demoTransactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) : [];
+  const [transactions] = useState(allTransactions);
 
   const filteredTransactions = transactions.filter(transaction =>
     transaction.description.toLowerCase().includes(searchTerm.toLowerCase()) ||

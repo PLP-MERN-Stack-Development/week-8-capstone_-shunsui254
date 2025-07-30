@@ -45,9 +45,20 @@ export const About = () => {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-foreground">About MyBudgeteer</h1>
-        <p className="text-muted-foreground mt-2">
-          A modern financial management solution crafted with precision and care
-        </p>
+        <div className="mt-4 space-y-3">
+          <p className="text-lg text-foreground font-medium">
+            🚀 Where Financial Chaos Meets Digital Zen
+          </p>
+          <p className="text-muted-foreground leading-relaxed">
+            MyBudgeteer isn't just another budgeting app—it's your financial transformation catalyst. We've weaponized cutting-edge technology to turn the mundane world of expense tracking into an engaging, intelligent experience that actually makes you <em>want</em> to manage your money.
+          </p>
+          <p className="text-muted-foreground leading-relaxed">
+            Built for the ambitious, the overwhelmed, and everyone in between, this isn't your grandmother's spreadsheet. We're talking AI-powered insights, gamified achievements, multi-currency mastery, and offline resilience—all wrapped in a design so sleek it makes your bank's app weep with envy.
+          </p>
+          <p className="text-foreground font-medium">
+            Ready to transform financial stress into financial success? Welcome to your money's new home. 💰✨
+          </p>
+        </div>
       </div>
 
       {/* Developer Section */}
@@ -61,8 +72,12 @@ export const About = () => {
         <CardContent>
           <div className="space-y-4">
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-full bg-gradient-primary flex items-center justify-center">
-                <span className="text-white font-bold text-xl">CB</span>
+              <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-primary/20">
+                <img 
+                  src="/profile.jpg" 
+                  alt="Cecil Bezalel - Developer" 
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div>
                 <h3 className="text-lg font-semibold">Cecil Bezalel</h3>
@@ -72,19 +87,15 @@ export const About = () => {
             
             <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
               <p>
-                Hi there! I'm Cecil Bezalel, and I pour my heart into creating tools that simplify life. With a knack for modern web technologies and a real-world grasp of money matters, I've crafted MyBudgeteer to be your new budgeting best friend.
+                👋 Cecil Bezalel here – the dev who turned budgeting from boring spreadsheets into something you'll actually <em>want</em> to use. I blend cutting-edge tech with real-world financial wisdom to create tools that don't just work, they <strong>work for you</strong>.
               </p>
               
               <p>
-                I totally get it—budgeting can feel like a chore. That's why I've made MyBudgeteer as intuitive and user-friendly as possible. It's like having a financial advisor tucked right in your pocket, minus the steep fees. And it's not just easy; it's efficient too. I've obsessed over every detail so you can breeze through your budgeting tasks and get back to the things that light you up.
-              </p>
-              
-              <p>
-                When I'm not coding, I'm out exploring hiking trails or savoring a cup of coffee at my favorite local spot. I believe a great budget shouldn't tie you down—it should set you free to enjoy what you love. With MyBudgeteer, you're not just getting a tool; you're gaining a partner in financial wellness. My passion and know-how are woven into every feature, so you can trust that your financial journey is in caring, capable hands.
+                Tired of budgeting apps that feel like homework? Same. That's why I engineered MyBudgeteer to be your financial wingman – intelligent enough to guide you, simple enough to love, and powerful enough to transform how you think about money. No finance degree required. ✨
               </p>
               
               <p className="font-medium text-foreground">
-                Ready to take control of your finances with ease? Give MyBudgeteer a try and see how it can transform your budgeting experience.
+                From coffee-fueled coding sessions to hiking trails, I believe your budget should enhance your life, not limit it. Ready to experience financial management that actually makes sense?
               </p>
             </div>
             

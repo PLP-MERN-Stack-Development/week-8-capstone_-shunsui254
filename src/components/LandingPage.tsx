@@ -2,6 +2,12 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { 
   DollarSign, 
   Shield, 
@@ -13,17 +19,30 @@ import {
   Star,
   Target,
   PieChart,
-  MessageCircle
+  MessageCircle,
+  Mail,
+  Github,
+  ChevronDown
 } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { ContactForm } from "@/components/ContactForm";
 
 export const LandingPage = () => {
   const [email, setEmail] = useState("");
   const [isVisible, setIsVisible] = useState(false);
+  const [isContactFormOpen, setIsContactFormOpen] = useState(false);
 
   useEffect(() => {
     setIsVisible(true);
   }, []);
+
+  const handleOpenContactForm = () => {
+    setIsContactFormOpen(true);
+  };
+
+  const handleCloseContactForm = () => {
+    setIsContactFormOpen(false);
+  };
 
   const features = [
     {
@@ -103,7 +122,7 @@ export const LandingPage = () => {
         <div className="container flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-2 transition-transform duration-300 hover:scale-105">
             <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10 transition-colors duration-300 hover:bg-primary/20">
-              <DollarSign className="h-6 w-6 text-primary transition-transform duration-300 hover:rotate-12" />
+              <img src="/aikon.png" alt="MyBudgeteer Logo" className="h-7 w-7 transition-transform duration-300 hover:rotate-12" />
             </div>
             <h1 className="text-2xl font-bold text-foreground">MyBudgeteer</h1>
           </div>
@@ -140,10 +159,39 @@ export const LandingPage = () => {
               Start Tracking Now
               <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
             </Button>
-            <Button size="lg" variant="outline" className="group transition-all duration-300 hover:scale-105 hover:shadow-lg">
-              <MessageCircle className="mr-2 h-5 w-5 transition-transform duration-300 group-hover:rotate-12" />
-              Contact Cecil
-            </Button>
+            
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button size="lg" variant="outline" className="group transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                  <MessageCircle className="mr-2 h-5 w-5 transition-transform duration-300 group-hover:rotate-12" />
+                  Contact Cecil
+                  <ChevronDown className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:rotate-180" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="center" className="w-48">
+                <DropdownMenuItem 
+                  onClick={handleOpenContactForm}
+                  className="cursor-pointer"
+                >
+                  <Mail className="mr-2 h-4 w-4" />
+                  Send Message
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => window.open("https://github.com/shunsui254", "_blank")}
+                  className="cursor-pointer"
+                >
+                  <Github className="mr-2 h-4 w-4" />
+                  View GitHub
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => window.open("https://wa.me/254799350952", "_blank")}
+                  className="cursor-pointer"
+                >
+                  <MessageCircle className="mr-2 h-4 w-4" />
+                  WhatsApp Chat
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
           
           <div className={`flex items-center justify-center gap-6 mt-8 text-sm text-muted-foreground transition-all duration-1000 delay-800 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
@@ -278,22 +326,26 @@ export const LandingPage = () => {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="flex items-center justify-center">
-                <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center transition-all duration-300 hover:scale-110 hover:bg-primary/20">
-                  <span className="text-primary font-bold text-3xl">CB</span>
+                <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-primary/20 transition-all duration-300 hover:scale-110 hover:border-primary/40">
+                  <img 
+                    src="/profile.jpg" 
+                    alt="Cecil Bezalel - Developer" 
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               </div>
               
               <div className="space-y-4 text-center max-w-3xl mx-auto">
                 <p className="text-muted-foreground leading-relaxed">
-                  Hi there! I'm Cecil Bezalel, and I pour my heart into creating tools that simplify life. 
-                  With a knack for modern web technologies and a real-world grasp of money matters, 
-                  I've crafted MyBudgeteer to be your new financial tracking best friend.
+                  👋 Cecil Bezalel here – the developer who turned financial chaos into digital zen. 
+                  I blend cutting-edge tech with real-world money wisdom to create tools that don't just work, 
+                  they <em>transform</em> how you think about your finances. Meet MyBudgeteer: your new financial wingman.
                 </p>
                 
                 <p className="text-muted-foreground leading-relaxed">
-                  I totally get it—financial tracking can feel like a chore. That's why I've made MyBudgeteer as 
-                  intuitive and user-friendly as possible. It's like having a financial advisor tucked 
-                  right in your pocket, minus the steep fees.
+                  Tired of budgeting apps that feel like homework? <strong>Same.</strong> That's why I engineered MyBudgeteer 
+                  to be ridiculously intuitive – think financial advisor meets best friend, minus the hefty price tag 
+                  and judgmental looks at your coffee spending. ☕✨
                 </p>
                 
                 <div className="flex flex-wrap justify-center gap-2 mt-6">
@@ -318,7 +370,7 @@ export const LandingPage = () => {
             Ready to Transform Your Financial Tracking Experience?
           </h2>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Join thousands of users who have taken control of their finances with MyBudgeteer
+            Join us and take control of your finances with MyBudgeteer – your journey to financial freedom starts here
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
@@ -365,15 +417,31 @@ export const LandingPage = () => {
               <p className="text-sm text-muted-foreground mb-2">
                 Created with ❤️ by Cecil Bezalel
               </p>
-              <div className="flex items-center justify-center md:justify-end gap-4 text-sm text-muted-foreground">
-                <a href="mailto:Cecilbezalel@gmail.com" className="hover:text-primary transition-all duration-300 hover:scale-105">
-                  Cecilbezalel@gmail.com
+              <div className="flex items-center justify-center md:justify-end gap-3">
+                <button 
+                  onClick={handleOpenContactForm}
+                  className="p-2 rounded-full hover:bg-primary/10 hover:text-primary transition-all duration-300 hover:scale-110"
+                  title="Send Message"
+                >
+                  <Mail className="h-5 w-5" />
+                </button>
+                <a 
+                  href="https://github.com/shunsui254" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-full hover:bg-primary/10 hover:text-primary transition-all duration-300 hover:scale-110"
+                  title="GitHub"
+                >
+                  <Github className="h-5 w-5" />
                 </a>
-                <a href="https://github.com/shunsui254" className="hover:text-primary transition-all duration-300 hover:scale-105">
-                  GitHub
-                </a>
-                <a href="https://wa.me/254799350952" className="hover:text-primary transition-all duration-300 hover:scale-105">
-                  WhatsApp
+                <a 
+                  href="https://wa.me/254799350952" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-full hover:bg-primary/10 hover:text-primary transition-all duration-300 hover:scale-110"
+                  title="WhatsApp"
+                >
+                  <MessageCircle className="h-5 w-5" />
                 </a>
               </div>
             </div>
@@ -384,6 +452,12 @@ export const LandingPage = () => {
           </div>
         </div>
       </footer>
+
+      {/* Contact Form Modal */}
+      <ContactForm 
+        isOpen={isContactFormOpen} 
+        onClose={handleCloseContactForm} 
+      />
     </div>
   );
 };

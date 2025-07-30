@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Sidebar } from "@/components/Sidebar";
@@ -7,6 +7,7 @@ import { TransactionList } from "@/components/TransactionList";
 import { BudgetOverview } from "@/components/BudgetOverview";
 import { Analytics } from "@/components/Analytics";
 import { About } from "@/components/About";
+import { AdvancedFeaturesPage } from "@/pages/AdvancedFeaturesPage";
 import { CurrencyProvider } from "@/components/CurrencyProvider";
 import { CurrencyDashboard } from "@/pages/CurrencyDashboard";
 import { CurrencyNotifications } from "@/components/CurrencyNotifications";
@@ -22,6 +23,10 @@ const DashboardPage = () => {
   const handleTabChange = (tab: string) => {
     if (tab === "settings") {
       navigate("/account-settings");
+      return;
+    }
+    if (tab === "advanced-features") {
+      navigate("/advanced-features");
       return;
     }
     setActiveTab(tab);

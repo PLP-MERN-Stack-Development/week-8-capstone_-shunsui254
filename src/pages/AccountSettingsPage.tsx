@@ -502,15 +502,15 @@ export const AccountSettingsPage = () => {
           </div>
 
           {/* Security Assurance */}
-          <div className="p-4 bg-green-50 border border-green-200 rounded-lg mb-4">
-            <div className="flex items-center gap-2 text-green-800">
+          <div className="p-4 bg-success/10 border border-success/50 rounded-lg mb-4">
+            <div className="flex items-center gap-2 text-success-foreground">
               <Shield className="h-5 w-5" />
               <span className="font-medium">Your data and payments are protected with industry-standard encryption</span>
             </div>
           </div>
 
           {isDemo && (
-            <Alert className="border-amber-200 bg-amber-50">
+            <Alert className="border-warning/50 bg-warning/10">
               <Info className="h-4 w-4" />
               <AlertDescription>
                 You're using the demo account. Some features like billing and account deletion are disabled for demonstration purposes.

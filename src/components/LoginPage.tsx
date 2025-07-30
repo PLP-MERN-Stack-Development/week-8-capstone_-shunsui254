@@ -9,6 +9,7 @@ import { Eye, EyeOff, DollarSign, ArrowLeft, LogIn, Mail, Lock } from "lucide-re
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { useToast } from "@/hooks/use-toast";
+import { apiService, type LoginCredentials } from "@/lib/apiService";
 
 interface LoginFormData {
   email: string;
@@ -75,120 +76,109 @@ export const LoginPage = () => {
       await new Promise(resolve => setTimeout(resolve, 300));
       
       setLoginProgress(50);
-      await new Promise(resolve => setTimeout(resolve, 400));
       
-      setLoginProgress(80);
-      // Simulate API call - In a real app, this would be an actual authentication request
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Check if this is demo login
+      const isDemoLogin = formData.email.toLowerCase() === "demo@mybudgeteer.com" && formData.password === "demo123";
+      
+      let response;
+      if (isDemoLogin) {
+        // Use demo login endpoint
+        response = await apiService.loginDemo();
+      } else {
+        // Use regular login endpoint
+        const credentials: LoginCredentials = {
+          email: formData.email,
+          password: formData.password,
+        };
+        response = await apiService.login(credentials);
+      }
       
       setLoginProgress(95);
       
-      // Mock authentication logic
-      const mockUsers = [
-        { 
-          email: "demo@mybudgeteer.com", 
-          password: "demo123", 
-          name: "Demo Alpha User",
-          firstName: "Demo",
-          surname: "User",
-          otherName: "Alpha",
-          phoneNumber: "+1 (555) 123-4567",
-          preferredCurrency: "USD",
-          profilePicture: "",
-          createdAt: "2024-01-15T08:30:00.000Z"
-        },
-        { 
-          email: "cecil@mybudgeteer.com", 
-          password: "admin123", 
-          name: "Cecil Bezalel",
-          firstName: "Cecil",
-          surname: "Bezalel",
-          otherName: "",
-          phoneNumber: "+1 (555) 987-6543",
-          preferredCurrency: "EUR",
-          profilePicture: "",
-          createdAt: "2023-12-01T10:15:00.000Z"
-        }
-      ];
+      // Validate response structure
+      if (!response || !response.user || !response.token) {
+        throw new Error('Invalid response from server');
+      }
+      
+      // Save the JWT token
+      apiService.saveToken(response.token);
+      
+      // Store user session (for compatibility with existing components)
+      localStorage.setItem("mybudgeteer_user", JSON.stringify({
+        email: response.user.email,
+        name: `${response.user.firstName} ${response.user.surname}${response.user.otherName ? ' ' + response.user.otherName : ''}`.trim(),
+        firstName: response.user.firstName,
+        surname: response.user.surname,
+        otherName: response.user.otherName,
+        phoneNumber: response.user.phoneNumber,
+        preferredCurrency: response.user.preferredCurrency,
+        profilePicture: response.user.profilePicture,
+        createdAt: response.user.createdAt,
+        loginTime: new Date().toISOString(),
+        fullName: `${response.user.firstName} ${response.user.surname}${response.user.otherName ? ' ' + response.user.otherName : ''}`.trim()
+      }));
 
-      const user = mockUsers.find(u => 
-        u.email.toLowerCase() === formData.email.toLowerCase() && 
-        u.password === formData.password
-      );
+      // Track login history for first-time user detection
+      localStorage.setItem("mybudgeteer_last_login", new Date().toISOString());
 
-      if (user) {
-        setLoginProgress(100);
-        
-        // Store user session (in a real app, you'd use proper session management)
-        localStorage.setItem("mybudgeteer_user", JSON.stringify({
-          email: user.email,
-          name: user.name,
-          firstName: user.firstName,
-          surname: user.surname,
-          otherName: user.otherName,
-          phoneNumber: user.phoneNumber,
-          preferredCurrency: user.preferredCurrency,
-          profilePicture: user.profilePicture,
-          createdAt: user.createdAt,
-          loginTime: new Date().toISOString()
-        }));
-
-        // Store demo account preferences
+      // Store preferences (demo gets rich data, regular users start clean)
+      if (isDemoLogin) {
         const demoPreferences = {
-          budgetType: user.email === "demo@mybudgeteer.com" ? "family" : "business",
-          budgetPeriod: user.email === "demo@mybudgeteer.com" ? "monthly" : "weekly",
+          budgetType: "family",
+          budgetPeriod: "monthly",
           emailNotifications: true,
           pushNotifications: true,
           language: "en",
-          currency: user.preferredCurrency
+          currency: response.user.preferredCurrency
         };
         localStorage.setItem("mybudgeteer_preferences", JSON.stringify(demoPreferences));
-        
-        // Set currency for the app
-        localStorage.setItem("selectedCurrency", user.preferredCurrency);
-
-        toast({
-          title: "Login Successful",
-          description: `Welcome back, ${user.name}!`,
-        });
-
-        // Short delay to show 100% progress
-        await new Promise(resolve => setTimeout(resolve, 300));
-        
-        // Redirect to dashboard
-        navigate("/dashboard");
-      } else {
-        setLoginProgress(0);
-        setFailedAttempts(prev => prev + 1);
-        
-        // Invalid credentials - stay on login page with helpful messaging
-        const attempts = failedAttempts + 1;
-        let errorMessage = "Invalid email or password. Please check your credentials and try again.";
-        
-        if (attempts >= 3) {
-          errorMessage = `Invalid credentials. ${attempts} failed attempts. Please double-check your email and password, or try using the demo account.`;
-        } else if (attempts >= 2) {
-          errorMessage = "Invalid credentials. Please verify your email and password are correct.";
-        }
-        
-        setError(errorMessage);
-        
-        // Clear password field for security
-        setFormData(prev => ({
-          ...prev,
-          password: ""
-        }));
-        
-        // Show toast notification
-        toast({
-          title: "Login Failed",
-          description: attempts >= 3 ? "Multiple failed attempts. Please check your credentials carefully." : "Invalid email or password. Please try again.",
-          variant: "destructive"
-        });
       }
-    } catch (err) {
-      setError("Something went wrong. Please try again.");
+      
+      // Set currency for the app
+      localStorage.setItem("selectedCurrency", response.user.preferredCurrency);
+
+      setLoginProgress(100);
+
+      toast({
+        title: "Login Successful",
+        description: `Welcome back, ${response.user.firstName}!`,
+      });
+
+      // Short delay to show 100% progress
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+      // Redirect to dashboard
+      navigate("/dashboard");
+
+    } catch (err: any) {
+      console.error('Login error:', err);
       setLoginProgress(0);
+      setFailedAttempts(prev => prev + 1);
+      
+      // Invalid credentials - stay on login page with helpful messaging
+      const attempts = failedAttempts + 1;
+      let errorMessage = err.message || "Invalid email or password. Please check your credentials and try again.";
+      
+      if (attempts >= 3) {
+        errorMessage = `Invalid credentials. ${attempts} failed attempts. Please double-check your email and password, or try using the demo account.`;
+      } else if (attempts >= 2) {
+        errorMessage = "Invalid credentials. Please verify your email and password are correct.";
+      }
+      
+      setError(errorMessage);
+      
+      // Clear password field for security
+      setFormData(prev => ({
+        ...prev,
+        password: ""
+      }));
+      
+      // Show toast notification
+      toast({
+        title: "Login Failed",
+        description: attempts >= 3 ? "Multiple failed attempts. Please check your credentials carefully." : errorMessage,
+        variant: "destructive"
+      });
     } finally {
       setLoading(false);
       setLoginProgress(0);
@@ -240,7 +230,7 @@ export const LoginPage = () => {
         <div className="container flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-2">
             <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10">
-              <DollarSign className="h-6 w-6 text-primary" />
+              <img src="/aikon.png" alt="MyBudgeteer Logo" className="h-7 w-7" />
             </div>
             <h1 className="text-2xl font-bold text-foreground">MyBudgeteer</h1>
           </div>

@@ -10,6 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Eye, EyeOff, DollarSign, ArrowLeft, UserPlus, Mail, Lock, User, Phone, Shield, CheckCircle } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useToast } from "@/hooks/use-toast";
+import { clearAllUserData, initializeNewUserDefaults } from "@/lib/clearUserData";
+import { apiService, type SignUpData } from "@/lib/apiService";
 
 interface SignUpFormData {
   firstName: string;
@@ -165,40 +167,49 @@ export const SignUpPage = () => {
     setLoading(true);
 
     try {
-      // Simulate API call - In a real app, this would create the account
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // IMPORTANT: Clear ALL existing user data before creating new account
+      // This ensures the new user starts with a completely clean slate
+      clearAllUserData();
       
-      // Mock successful account creation
-      const fullName = `${formData.firstName} ${formData.surname}${formData.otherName ? ' ' + formData.otherName : ''}`.trim();
-      const newUser = {
-        id: Date.now().toString(),
+      // Prepare data for API
+      const signUpData: SignUpData = {
         firstName: formData.firstName,
         surname: formData.surname,
-        otherName: formData.otherName,
-        fullName: fullName,
+        otherName: formData.otherName || undefined,
         email: formData.email,
-        phoneNumber: formData.phoneNumber,
+        password: formData.password,
+        phoneNumber: formData.phoneNumber || undefined,
         preferredCurrency: formData.preferredCurrency,
-        createdAt: new Date().toISOString(),
       };
 
-      // Store user session
+      // Call backend API to create account
+      const response = await apiService.signUp(signUpData);
+      
+      // Save the JWT token
+      apiService.saveToken(response.token);
+      
+      // Initialize minimal defaults for new user (only currency and theme)
+      initializeNewUserDefaults(formData.email, formData.preferredCurrency);
+
+      // Store user data in localStorage (for compatibility with existing components)
       localStorage.setItem("mybudgeteer_user", JSON.stringify({
-        ...newUser,
-        loginTime: new Date().toISOString()
+        ...response.user,
+        loginTime: new Date().toISOString(),
+        fullName: `${response.user.firstName} ${response.user.surname}${response.user.otherName ? ' ' + response.user.otherName : ''}`.trim()
       }));
 
       toast({
         title: "Account Created Successfully!",
-        description: `Welcome to MyBudgeteer, ${fullName}!`,
+        description: `Welcome to MyBudgeteer, ${response.user.firstName}! Your account starts with a clean slate.`,
       });
 
       // Redirect to dashboard
       navigate("/dashboard");
-    } catch (err) {
+    } catch (err: any) {
+      console.error('Sign up error:', err);
       toast({
-        title: "Error",
-        description: "Something went wrong. Please try again.",
+        title: "Sign Up Failed",
+        description: err.message || "Something went wrong. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -245,7 +256,7 @@ export const SignUpPage = () => {
         <div className="container flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-2">
             <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10">
-              <DollarSign className="h-6 w-6 text-primary" />
+              <img src="/aikon.png" alt="MyBudgeteer Logo" className="h-7 w-7" />
             </div>
             <h1 className="text-2xl font-bold text-foreground">MyBudgeteer</h1>
           </div>

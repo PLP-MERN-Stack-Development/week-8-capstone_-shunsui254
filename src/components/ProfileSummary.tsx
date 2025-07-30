@@ -88,9 +88,9 @@ export const ProfileSummary = () => {
             <div className="flex items-center gap-2">
               <span className="text-sm text-muted-foreground">{completion}%</span>
               {completion === 100 ? (
-                <CheckCircle className="h-4 w-4 text-green-500" />
+                <CheckCircle className="h-4 w-4 text-success" />
               ) : (
-                <AlertCircle className="h-4 w-4 text-amber-500" />
+                <AlertCircle className="h-4 w-4 text-warning" />
               )}
             </div>
           </div>

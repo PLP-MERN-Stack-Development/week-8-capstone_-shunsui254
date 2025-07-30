@@ -1,4 +1,4 @@
-import { LayoutDashboard, Receipt, PiggyBank, BarChart3, DollarSign, Info, X, ChevronLeft, ChevronRight, Settings } from "lucide-react";
+import { LayoutDashboard, Receipt, PiggyBank, BarChart3, DollarSign, Info, X, ChevronLeft, ChevronRight, Settings, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -17,6 +17,7 @@ const navigation = [
   { id: "budgets", label: "Budgets", icon: PiggyBank },
   { id: "currency", label: "Currency", icon: DollarSign },
   { id: "analytics", label: "Analytics", icon: BarChart3 },
+  { id: "advanced-features", label: "Advanced Features", icon: Zap },
   { id: "settings", label: "Account Settings", icon: Settings },
   { id: "about", label: "About", icon: Info },
 ];
@@ -42,10 +43,10 @@ export const Sidebar = ({ activeTab, onTabChange, isOpen, onClose, isCollapsed =
         )}
       >
         <div className="flex h-full flex-col">
-          {/* Mobile close button / Desktop collapse button */}
+          {/* Controls Section */}
           <div className="flex items-center justify-between p-4">
             <span className={cn("text-sm font-medium", isCollapsed && "md:hidden", "md:block")}>
-              {!isCollapsed ? "Menu" : ""}
+              {!isCollapsed ? "Navigation" : ""}
             </span>
             <div className="flex items-center gap-2">
               {/* Desktop collapse toggle */}

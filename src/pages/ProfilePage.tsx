@@ -40,6 +40,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { isDemoAccount } from "@/lib/userUtils";
+import { isFirstTimeUser } from "@/lib/userUtils";
 import { useCurrency, CURRENCIES } from "@/hooks/useCurrency";
 import { useTheme } from "@/hooks/useTheme";
 
@@ -386,6 +387,8 @@ export const ProfilePage = () => {
     return <div>Loading...</div>;
   }
 
+  const isFirstTime = isFirstTimeUser();
+
   return (
     <div className="min-h-screen bg-background">
       {/* Simple Header */}
@@ -421,7 +424,9 @@ export const ProfilePage = () => {
             
             <div className="flex-1">
               <h1 className="text-3xl font-bold text-foreground mb-2">
-                Welcome back, {userData.firstName}! 👋
+                {isFirstTime 
+                  ? `Welcome, ${userData.firstName}! 👋` 
+                  : `Welcome back, ${userData.firstName}! 👋`}
               </h1>
               <p className="text-muted-foreground mb-3">
                 This is your space to make MyBudgeteer truly yours!
@@ -442,7 +447,7 @@ export const ProfilePage = () => {
                   </div>
                 </div>
                 {profileCompletion === 100 && (
-                  <Badge variant="secondary" className="bg-green-100 text-green-800">
+                  <Badge variant="secondary" className="bg-success/10 text-success border-success/20">
                     <CheckCircle className="h-3 w-3 mr-1" />
                     Complete
                   </Badge>
@@ -452,7 +457,7 @@ export const ProfilePage = () => {
           </div>
 
           {isDemoAccount(userData.email) && (
-            <Alert className="border-amber-200 bg-amber-50">
+            <Alert className="border-warning/50 bg-warning/10">
               <Info className="h-4 w-4" />
               <AlertDescription>
                 You're using the demo account. Some features like account deletion and password changes are disabled for demonstration purposes.
@@ -839,8 +844,8 @@ export const ProfilePage = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                  <div className="flex items-center gap-2 text-green-800">
+                <div className="p-4 bg-success/10 border border-success/50 rounded-lg">
+                  <div className="flex items-center gap-2 text-success-foreground">
                     <CheckCircle className="h-5 w-5" />
                     <span className="font-medium">Your data is protected with top-notch security</span>
                   </div>

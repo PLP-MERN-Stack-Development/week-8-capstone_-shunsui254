@@ -79,6 +79,36 @@ export const getUserInitials = (user: any): string => {
   return 'U';
 };
 
+export const isFirstTimeUser = (): boolean => {
+  const user = getCurrentUser();
+  if (!user) return true;
+  
+  // Demo accounts are never considered first-time users
+  if (isDemoAccount(user.email)) return false;
+  
+  // Check if user has any transactions
+  const transactions = localStorage.getItem("mybudgeteer_transactions");
+  if (transactions) {
+    try {
+      const parsedTransactions = JSON.parse(transactions);
+      if (Array.isArray(parsedTransactions) && parsedTransactions.length > 0) {
+        return false;
+      }
+    } catch {
+      // Invalid transactions data, consider as first-time
+    }
+  }
+  
+  // Check if user has a login time stored (indicates previous sessions)
+  const hasLoginHistory = localStorage.getItem("mybudgeteer_last_login");
+  if (hasLoginHistory) {
+    return false;
+  }
+  
+  // If no transactions and no login history, it's a first-time user
+  return true;
+};
+
 export const calculateProfileCompletion = (user: any): number => {
   if (!user) return 0;
   

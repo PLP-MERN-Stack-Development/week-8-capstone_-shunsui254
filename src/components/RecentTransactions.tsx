@@ -2,7 +2,7 @@ import { ArrowUpRight, ArrowDownLeft, Calendar, Plus } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useCurrency } from "@/hooks/useCurrency";
-import { isNewUser } from "@/lib/userUtils";
+import { isNewUser, isDemoAccount } from "@/lib/userUtils";
 import { demoTransactions } from "@/data/demoTransactions";
 
 interface Transaction {
@@ -23,9 +23,11 @@ const recentTransactions: Transaction[] = demoTransactions
 export const RecentTransactions = () => {
   const { formatAmount, getConvertedAmount } = useCurrency();
   const newUser = isNewUser();
+  const demoUser = isDemoAccount();
   
-  // Show empty transactions for new users, demo data for demo accounts
-  const transactionsToShow = newUser ? [] : recentTransactions;
+  // Only show demo data for demo accounts, new users get empty list
+  const shouldShowDemoData = demoUser && !newUser;
+  const transactionsToShow = shouldShowDemoData ? recentTransactions : [];
   
   return (
     <Card>

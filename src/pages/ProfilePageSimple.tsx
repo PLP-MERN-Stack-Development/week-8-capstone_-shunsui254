@@ -29,6 +29,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { isDemoAccount } from "@/lib/userUtils";
+import { isFirstTimeUser } from "@/lib/userUtils";
 import { CURRENCIES } from "@/hooks/useCurrency";
 import { useTheme } from "@/hooks/useTheme";
 
@@ -207,6 +208,7 @@ export const ProfilePageSimple = () => {
   }
 
   const isDemo = isDemoAccount(userData.email);
+  const isFirstTime = isFirstTimeUser();
 
   return (
     <div className="min-h-screen bg-background">
@@ -243,7 +245,9 @@ export const ProfilePageSimple = () => {
             
             <div className="flex-1">
               <h1 className="text-3xl font-bold text-foreground mb-2">
-                Welcome back, {userData.firstName}! 👋
+                {isFirstTime 
+                  ? `Welcome, ${userData.firstName}! 👋` 
+                  : `Welcome back, ${userData.firstName}! 👋`}
               </h1>
               <p className="text-muted-foreground mb-3">
                 This is your space to make MyBudgeteer truly yours!
@@ -259,7 +263,7 @@ export const ProfilePageSimple = () => {
                   <Progress value={profileCompletion} className="h-2" />
                 </div>
                 {profileCompletion === 100 && (
-                  <Badge variant="secondary" className="bg-green-100 text-green-800">
+                  <Badge variant="secondary" className="bg-success/10 text-success border-success/20">
                     <CheckCircle className="h-3 w-3 mr-1" />
                     Complete
                   </Badge>
@@ -269,12 +273,12 @@ export const ProfilePageSimple = () => {
           </div>
 
           {isDemo && (
-            <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
-              <div className="flex items-center gap-2 text-amber-800">
+            <div className="p-4 bg-warning/10 border border-warning/50 rounded-lg">
+              <div className="flex items-center gap-2 text-warning-foreground">
                 <Info className="h-4 w-4" />
                 <span className="font-medium">Demo Account</span>
               </div>
-              <p className="text-sm text-amber-700 mt-1">
+              <p className="text-sm text-muted-foreground mt-1">
                 You're using the demo account. Some features may be limited for demonstration purposes.
               </p>
             </div>
@@ -585,8 +589,8 @@ export const ProfilePageSimple = () => {
 
                 <Separator />
 
-                <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                  <div className="flex items-center gap-2 text-green-800">
+                <div className="p-4 bg-success/10 border border-success/50 rounded-lg">
+                  <div className="flex items-center gap-2 text-success-foreground">
                     <CheckCircle className="h-5 w-5" />
                     <span className="font-medium">Your data is protected with top-notch security</span>
                   </div>

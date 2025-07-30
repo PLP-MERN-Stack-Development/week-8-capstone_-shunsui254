@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { useCurrency } from "@/hooks/useCurrency";
+import { isDemoAccount, isNewUser } from "@/lib/userUtils";
 
 interface Budget {
   id: string;
@@ -17,6 +18,8 @@ interface Budget {
 
 export const MultiCurrencyBudgets = () => {
   const { formatAmount, getConvertedAmount, currentCurrency } = useCurrency();
+  const demoUser = isDemoAccount();
+  const newUser = isNewUser();
   
   const [budgets] = useState<Budget[]>([
     {
@@ -45,15 +48,19 @@ export const MultiCurrencyBudgets = () => {
     }
   ]);
 
+  // Only show demo data for demo accounts, new users get empty state
+  const shouldShowData = demoUser && !newUser;
+  const displayBudgets = shouldShowData ? budgets : [];
+
   const getTotalBudget = () => {
-    return budgets.reduce((total, budget) => {
+    return displayBudgets.reduce((total, budget) => {
       const convertedLimit = getConvertedAmount(budget.limit, budget.currency);
       return total + convertedLimit;
     }, 0);
   };
 
   const getTotalSpent = () => {
-    return budgets.reduce((total, budget) => {
+    return displayBudgets.reduce((total, budget) => {
       const convertedSpent = getConvertedAmount(budget.spent, budget.currency);
       return total + convertedSpent;
     }, 0);
@@ -93,54 +100,68 @@ export const MultiCurrencyBudgets = () => {
 
         {/* Individual Budgets */}
         <div className="space-y-3">
-          {budgets.map((budget) => {
-            const convertedLimit = getConvertedAmount(budget.limit, budget.currency);
-            const convertedSpent = getConvertedAmount(budget.spent, budget.currency);
-            const percentage = (convertedSpent / convertedLimit) * 100;
-            
-            return (
-              <div key={budget.id} className="p-4 rounded-lg border bg-card/50">
-                <div className="flex items-center justify-between mb-2">
-                  <div>
-                    <h4 className="font-medium">{budget.category}</h4>
-                    <p className="text-xs text-muted-foreground">
-                      Budget set in {budget.currency} • {budget.period}
-                    </p>
+          {displayBudgets.length === 0 ? (
+            <div className="text-center py-8">
+              <Globe className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-lg font-semibold mb-2">No Multi-Currency Budgets</h3>
+              <p className="text-muted-foreground mb-4">
+                Create budgets in different currencies to track your international spending.
+              </p>
+              <Button className="gap-2">
+                <Plus className="h-4 w-4" />
+                Create Multi-Currency Budget
+              </Button>
+            </div>
+          ) : (
+            displayBudgets.map((budget) => {
+              const convertedLimit = getConvertedAmount(budget.limit, budget.currency);
+              const convertedSpent = getConvertedAmount(budget.spent, budget.currency);
+              const percentage = (convertedSpent / convertedLimit) * 100;
+              
+              return (
+                <div key={budget.id} className="p-4 rounded-lg border bg-card/50">
+                  <div className="flex items-center justify-between mb-2">
+                    <div>
+                      <h4 className="font-medium">{budget.category}</h4>
+                      <p className="text-xs text-muted-foreground">
+                        Budget set in {budget.currency} • {budget.period}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
+                        <Edit className="h-3 w-3" />
+                      </Button>
+                      <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
-                      <Edit className="h-3 w-3" />
-                    </Button>
-                    <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
-                      <Trash2 className="h-3 w-3" />
-                    </Button>
+                  
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className={percentage > 100 ? "text-destructive" : ""}>
+                        {formatAmount(convertedSpent)} spent
+                      </span>
+                      <span>{formatAmount(convertedLimit)} budget</span>
+                    </div>
+                    <Progress 
+                      value={Math.min(percentage, 100)} 
+                      className={`h-2 ${percentage > 100 ? "bg-destructive/20" : ""}`}
+                    />
+                    <div className="flex items-center justify-between text-xs text-muted-foreground">
+                      <span>
+                        {percentage > 100 
+                          ? `${formatAmount(convertedSpent - convertedLimit)} over budget` 
+                          : `${formatAmount(convertedLimit - convertedSpent)} remaining`
+                        }
+                      </span>
+                      <span>{percentage.toFixed(1)}%</span>
+                    </div>
                   </div>
                 </div>
-                
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className={percentage > 100 ? "text-destructive" : ""}>
-                      {formatAmount(convertedSpent)} spent
-                    </span>
-                    <span>{formatAmount(convertedLimit)} budget</span>
-                  </div>
-                  <Progress 
-                    value={Math.min(percentage, 100)} 
-                    className={`h-2 ${percentage > 100 ? "bg-destructive/20" : ""}`}
-                  />
-                  <div className="flex items-center justify-between text-xs text-muted-foreground">
-                    <span>
-                      {percentage > 100 
-                        ? `${formatAmount(convertedSpent - convertedLimit)} over budget` 
-                        : `${formatAmount(convertedLimit - convertedSpent)} remaining`
-                      }
-                    </span>
-                    <span>{percentage.toFixed(1)}%</span>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+              );
+            })
+          )}
         </div>
       </CardContent>
     </Card>

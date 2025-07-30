@@ -12,7 +12,7 @@ export const PageTransition = ({
   children, 
   loading = false, 
   loadingMessage,
-  minLoadTime = 800 
+  minLoadTime = 200 
 }: PageTransitionProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);

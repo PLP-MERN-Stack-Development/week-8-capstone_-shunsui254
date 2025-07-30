@@ -1,3 +1,22 @@
+/**
+ * Header Component for MyBudgeteer Application
+ * 
+ * This component provides the main navigation header that appears at the top of all pages.
+ * It includes the logo, user profile menu, theme toggle, currency selector, and mobile menu trigger.
+ * 
+ * Features:
+ * - Responsive design with mobile menu support
+ * - User authentication state management
+ * - Profile dropdown with user information
+ * - Theme switching capability
+ * - Currency selection
+ * - Demo account handling
+ * - Secure logout functionality
+ * 
+ * @author Cecil Bezalel
+ * @version 1.0.0
+ */
+
 import { Menu, DollarSign, User, Settings, LogOut, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -27,11 +46,13 @@ import {
 import { useState, useEffect } from "react";
 import { isDemoAccount } from "@/lib/userUtils";
 
+// Props interface for Header component
 interface HeaderProps {
-  onMenuClick: () => void;
-  sidebarOpen: boolean;
+  onMenuClick: () => void;  // Function to handle mobile menu toggle
+  sidebarOpen: boolean;     // Current state of sidebar visibility
 }
 
+// User data structure from localStorage
 interface User {
   email: string;
   name?: string;
@@ -39,13 +60,17 @@ interface User {
   loginTime: string;
 }
 
+/**
+ * Main Header Component
+ * Renders the top navigation bar with logo, user controls, and responsive menu
+ */
 export const Header = ({ onMenuClick, sidebarOpen }: HeaderProps) => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
 
+  // Load user data from localStorage on component mount
   useEffect(() => {
-    // Get user data from localStorage
     const userStr = localStorage.getItem("mybudgeteer_user");
     if (userStr) {
       try {
@@ -136,7 +161,7 @@ export const Header = ({ onMenuClick, sidebarOpen }: HeaderProps) => {
         
         <div className="flex items-center gap-2 ml-2 md:ml-0">
           <div className="flex items-center justify-center w-8 h-8 rounded-lg">
-            <DollarSign className="h-5 w-5" />
+            <img src="/aikon.png" alt="MyBudgeteer Logo" className="h-6 w-6" />
           </div>
           <h1 className="text-xl font-bold">
             MyBudgeteer
