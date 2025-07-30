@@ -24,9 +24,7 @@
 
 // Backend API base URL configuration
 // Uses environment variable in production, falls back to localhost for development
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL 
-  ? `${import.meta.env.VITE_API_BASE_URL}/api`
-  : 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
 // Debug logging for production troubleshooting
 console.log('🔧 API Service Configuration:');

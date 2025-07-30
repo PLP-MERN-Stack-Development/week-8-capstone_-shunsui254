@@ -24,6 +24,7 @@
    ```
    Name: mybudgeteer-backend
    Environment: Node
+   Runtime: Node 18
    Region: Choose closest to your users
    Branch: main
    Root Directory: backend
