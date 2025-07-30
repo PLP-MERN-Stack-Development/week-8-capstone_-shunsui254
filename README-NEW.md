@@ -368,6 +368,7 @@ This project showcases my ability to:
 ## 🙏 Acknowledgments
 
 Special recognition to:
+- **Power Learn Project**: For igniting my passion for programming and opening the gateway to the magical world of code - where ideas transform into reality through the art of development
 - **React Team**: For the exceptional developer experience and comprehensive ecosystem
 - **Vercel & Render**: For providing excellent deployment platforms with developer-friendly workflows
 - **MongoDB**: For the flexible, scalable database solution
