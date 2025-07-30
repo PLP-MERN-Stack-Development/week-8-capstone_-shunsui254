@@ -1,13 +1,37 @@
 {
   "name": "mybudgeteer-backend",
   "version": "1.0.0",
-  "description": "Backend API for MyBudgeteer",
+  "description": "RESTful API backend for MyBudgeteer personal finance management application. Built with Express.js, MongoDB, and comprehensive security middleware.",
   "main": "src/server.js",
+  "author": {
+    "name": "Cecil Bezalel",
+    "email": "cecilbezalel@gmail.com",
+    "url": "https://github.com/shunsui254"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shunsui254/mybudgeteer.git",
+    "directory": "backend"
+  },
+  "keywords": [
+    "express",
+    "mongodb",
+    "jwt",
+    "rest-api",
+    "personal-finance",
+    "backend",
+    "nodejs"
+  ],
   "scripts": {
     "start": "node src/server.js",
-    "build": "echo 'No build step required'",
-    "dev": "nodemon src/server.js",
-    "test": "jest"
+    "build": "echo 'No build step required for Node.js backend'",
+    "dev": "nodemon src/server.js --watch src",
+    "dev:debug": "nodemon --inspect src/server.js --watch src",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch",
+    "lint": "eslint src/**/*.js",
+    "seed": "node seedDemoData.js",
+    "health": "curl http://localhost:5000/api/health || echo 'Server not running'"
   },
   "dependencies": {
     "express": "^4.18.2",
@@ -24,13 +48,9 @@
     "nodemon": "^3.0.2",
     "jest": "^29.7.0"
   },
-  "keywords": [
-    "budget",
-    "finance",
-    "api",
-    "mongodb",
-    "express"
-  ],
-  "author": "MyBudgeteer Team",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
   "license": "MIT"
 }

@@ -3,15 +3,40 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "A modern multi-currency budgeting application with real-time exchange rates",
-  "author": "Cecil Bezalel",
+  "description": "A comprehensive personal finance management application built with React, TypeScript, and Node.js. Features real-time transaction tracking, budget planning, financial analytics, and AI-powered insights.",
+  "author": {
+    "name": "Cecil Bezalel",
+    "email": "cecilbezalel@gmail.com",
+    "url": "https://github.com/shunsui254"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shunsui254/mybudgeteer.git"
+  },
+  "homepage": "https://mybudgeteer-gold.vercel.app",
+  "keywords": [
+    "personal-finance",
+    "budget-management",
+    "expense-tracking",
+    "financial-analytics",
+    "react",
+    "typescript",
+    "nodejs",
+    "mongodb",
+    "fullstack"
+  ],
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "tsc && vite build",
     "build:dev": "vite build --mode development",
     "build:vercel": "tsc && vite build --mode production",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "build:analyze": "tsc && vite build --mode production --analyze",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint . --ext ts,tsx --fix",
+    "preview": "vite preview --host",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist node_modules/.vite",
+    "start:prod": "npm run build && npm run preview"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",

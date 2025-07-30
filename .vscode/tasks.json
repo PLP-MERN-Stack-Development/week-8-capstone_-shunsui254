@@ -1,0 +1,25 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "Start Frontend",
+			"command": "npm run dev",
+			"group": "build",
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"type": "shell",
+			"label": "Start Backend",
+			"command": "node",
+			"args": ["src/server.js"],
+			"options": {
+				"cwd": "${workspaceFolder}/backend"
+			},
+			"group": "build",
+			"isBackground": true,
+			"problemMatcher": []
+		}
+	]
+}

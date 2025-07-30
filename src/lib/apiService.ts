@@ -22,18 +22,47 @@
  * @version 1.0.0
  */
 
-// Backend API base URL configuration
-// Uses environment variable in production, falls back to localhost for development
+/**
+ * Backend API Configuration
+ * 
+ * Configures the base URL for all API requests with environment-aware fallback.
+ * In production, uses VITE_API_BASE_URL environment variable.
+ * In development, defaults to localhost:5000/api for local backend.
+ */
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
-// Debug logging for production troubleshooting
-console.log('🔧 API Service Configuration:');
-console.log('   Environment:', import.meta.env.MODE);
-console.log('   VITE_API_BASE_URL:', import.meta.env.VITE_API_BASE_URL);
-console.log('   Final API_BASE_URL:', API_BASE_URL);
+/**
+ * Development and Production Debug Logging
+ * 
+ * Provides visibility into API configuration for troubleshooting deployment issues.
+ * Logs are visible in browser console for both development and production environments.
+ */
+console.log('🔧 MyBudgeteer API Service Configuration:');
+console.log('   Environment Mode:', import.meta.env.MODE);
+console.log('   Environment API URL:', import.meta.env.VITE_API_BASE_URL || 'Not Set');
+console.log('   Final API Base URL:', API_BASE_URL);
 
-// Enhanced fetch wrapper with better error handling
-const apiRequest = async (url: string, options: RequestInit = {}) => {
+/**
+ * Enhanced API Request Wrapper
+ * 
+ * Provides centralized request handling with comprehensive error management,
+ * logging, and response processing. This wrapper ensures consistent behavior
+ * across all API calls and provides detailed debugging information.
+ * 
+ * Features:
+ * - Automatic JSON content-type headers
+ * - Comprehensive error handling with specific error types
+ * - Request/response logging for debugging
+ * - Network error detection and user-friendly messages
+ * - HTTP status code validation
+ * 
+ * @param url - The complete URL for the API request
+ * @param options - Fetch options including method, headers, body, etc.
+ * @returns Promise<Response> - The fetch response object
+ * @throws Error - Detailed error information for debugging and user feedback
+ */
+const apiRequest = async (url: string, options: RequestInit = {}): Promise<Response> => {
+  // Log outgoing request for debugging
   console.log(`🌐 API Request: ${options.method || 'GET'} ${url}`);
   
   try {
@@ -45,20 +74,31 @@ const apiRequest = async (url: string, options: RequestInit = {}) => {
       },
     });
 
+    // Log response status for debugging
     console.log(`📡 API Response: ${response.status} ${response.statusText}`);
 
+    // Handle non-successful HTTP status codes
     if (!response.ok) {
       const errorText = await response.text();
       console.error(`❌ API Error ${response.status}:`, errorText);
+      
+      // Create detailed error message with status code and server response
       throw new Error(`API Error ${response.status}: ${errorText || response.statusText}`);
     }
 
     return response;
   } catch (error) {
     console.error('🚨 Network Error:', error);
+    
+    // Handle network connectivity issues (CORS, server down, etc.)
     if (error instanceof TypeError && error.message.includes('fetch')) {
-      throw new Error(`Network Error: Unable to connect to ${API_BASE_URL}. Please check if the backend server is running.`);
+      throw new Error(
+        `Network Error: Unable to connect to ${API_BASE_URL}. ` +
+        `Please check if the backend server is running and accessible.`
+      );
     }
+    
+    // Re-throw other errors (HTTP errors, parsing errors, etc.)
     throw error;
   }
 };
