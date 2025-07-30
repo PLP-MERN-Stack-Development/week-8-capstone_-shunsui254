@@ -64,19 +64,26 @@ const queryClient = new QueryClient({
  * Main App Component
  * Sets up global providers and routing structure
  */
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    {/* Theme Provider - Enables dark/light mode switching */}
-    <ThemeProvider defaultTheme="system" storageKey="mybudgeteer-ui-theme">
-      {/* Tooltip Provider - Enables tooltips throughout the app */}
-      <TooltipProvider>
-        {/* Toast Notifications - Global notification system */}
-        <Toaster />
-        <Sonner />
-        
-        {/* Router Configuration - Defines all application routes */}
-        <BrowserRouter>
-          <Routes>
+const App = () => {
+  // Debug logging for production
+  console.log('MyBudgeteer App starting...')
+  console.log('Environment:', import.meta.env.MODE)
+  console.log('API Base URL:', import.meta.env.VITE_API_BASE_URL)
+  console.log('Node Environment:', import.meta.env.NODE_ENV)
+  
+  return (
+    <QueryClientProvider client={queryClient}>
+      {/* Theme Provider - Enables dark/light mode switching */}
+      <ThemeProvider defaultTheme="system" storageKey="mybudgeteer-ui-theme">
+        {/* Tooltip Provider - Enables tooltips throughout the app */}
+        <TooltipProvider>
+          {/* Toast Notifications - Global notification system */}
+          <Toaster />
+          <Sonner />
+          
+          {/* Router Configuration - Defines all application routes */}
+          <BrowserRouter>
+            <Routes>
             {/* Public Routes - Accessible without authentication */}
             <Route 
               path="/" 
@@ -179,9 +186,10 @@ const App = () => (
             />
           </Routes>
         </BrowserRouter>
-    </TooltipProvider>
+      </TooltipProvider>
     </ThemeProvider>
   </QueryClientProvider>
-);
+  )
+}
 
 export default App;
