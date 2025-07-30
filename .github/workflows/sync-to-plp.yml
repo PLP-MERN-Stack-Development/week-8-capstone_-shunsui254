@@ -14,11 +14,14 @@ jobs:
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+    
+    - name: Configure Git
+      run: |
+        git config --global user.name "GitHub Actions Bot"
+        git config --global user.email "actions@github.com"
     
     - name: Add PLP remote and push
       run: |
-        git remote add plp https://github.com/PLP-MERN-Stack-Development/week-8-capstone_-shunsui254.git
+        git remote add plp https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/PLP-MERN-Stack-Development/week-8-capstone_-shunsui254.git
         git push plp main --force
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
