@@ -24,7 +24,46 @@
 
 // Backend API base URL configuration
 // Uses environment variable in production, falls back to localhost for development
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL 
+  ? `${import.meta.env.VITE_API_BASE_URL}/api`
+  : 'http://localhost:5000/api';
+
+// Debug logging for production troubleshooting
+console.log('🔧 API Service Configuration:');
+console.log('   Environment:', import.meta.env.MODE);
+console.log('   VITE_API_BASE_URL:', import.meta.env.VITE_API_BASE_URL);
+console.log('   Final API_BASE_URL:', API_BASE_URL);
+
+// Enhanced fetch wrapper with better error handling
+const apiRequest = async (url: string, options: RequestInit = {}) => {
+  console.log(`🌐 API Request: ${options.method || 'GET'} ${url}`);
+  
+  try {
+    const response = await fetch(url, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+    });
+
+    console.log(`📡 API Response: ${response.status} ${response.statusText}`);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`❌ API Error ${response.status}:`, errorText);
+      throw new Error(`API Error ${response.status}: ${errorText || response.statusText}`);
+    }
+
+    return response;
+  } catch (error) {
+    console.error('🚨 Network Error:', error);
+    if (error instanceof TypeError && error.message.includes('fetch')) {
+      throw new Error(`Network Error: Unable to connect to ${API_BASE_URL}. Please check if the backend server is running.`);
+    }
+    throw error;
+  }
+};
 
 // Type definitions for API requests and responses
 
@@ -122,7 +161,7 @@ class ApiService {
 
   // Authentication endpoints
   async signUp(userData: SignUpData): Promise<AuthResponse> {
-    const response = await fetch(`${API_BASE_URL}/auth/register`, {
+    const response = await apiRequest(`${API_BASE_URL}/auth/register`, {
       method: 'POST',
       headers: this.getAuthHeaders(),
       body: JSON.stringify(userData),
@@ -132,7 +171,7 @@ class ApiService {
   }
 
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
+    const response = await apiRequest(`${API_BASE_URL}/auth/login`, {
       method: 'POST',
       headers: this.getAuthHeaders(),
       body: JSON.stringify(credentials),
