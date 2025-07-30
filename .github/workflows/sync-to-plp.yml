@@ -1,0 +1,24 @@
+name: Sync to PLP Repository
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout source repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Add PLP remote and push
+      run: |
+        git remote add plp https://github.com/PLP-MERN-Stack-Development/week-8-capstone_-shunsui254.git
+        git push plp main --force
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
