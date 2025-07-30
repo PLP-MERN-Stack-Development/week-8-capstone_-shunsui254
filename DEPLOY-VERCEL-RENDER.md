@@ -37,9 +37,9 @@ In Render Dashboard → Environment:
 ```bash
 NODE_ENV=production
 PORT=10000
-MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/mybudgeteer
-JWT_SECRET=your-super-secure-jwt-secret-at-least-32-characters-long
-CLIENT_URL=https://mybudgeteer.vercel.app
+MONGODB_URI=mongodb+srv://cecilbezalel:Cb200300!@cluster0.mc5mxnb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+JWT_SECRET=e5c6cd1985a28d1dc231081dcc9bc7cca6730010b53ee194d667f256c84cbebc6cb4e8e6dbdbff6c3a643f67c64a0a76a04ca69b417531ece8fbf2286ee3d08fb
+CLIENT_URL=https://mybudgeteer-gold.vercel.app
 ```
 
 ### Step 3: Deploy Backend
@@ -75,7 +75,7 @@ curl https://your-backend-url.onrender.com/api/health
 In Vercel Dashboard → Settings → Environment Variables:
 ```bash
 Variable: VITE_API_BASE_URL
-Value: https://your-backend-url.onrender.com
+Value: https://mybudgeteer-backend.onrender.com/api
 ```
 
 ### Step 3: Deploy Frontend
@@ -90,7 +90,7 @@ Value: https://your-backend-url.onrender.com
 ### Update Backend CORS
 Once you have your Vercel URL, update the backend environment:
 ```bash
-CLIENT_URL=https://your-frontend-url.vercel.app
+CLIENT_URL=https://mybudgeteer-gold.vercel.app
 ```
 
 ### Redeploy Backend
@@ -174,12 +174,12 @@ git push origin main
 # Backend (.env for Render)
 NODE_ENV=production
 PORT=10000
-MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/mybudgeteer
-JWT_SECRET=your-jwt-secret-here
-CLIENT_URL=https://mybudgeteer.vercel.app
+MONGODB_URI=mongodb+srv://cecilbezalel:Cb200300!@cluster0.mc5mxnb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+JWT_SECRET=e5c6cd1985a28d1dc231081dcc9bc7cca6730010b53ee194d667f256c84cbebc6cb4e8e6dbdbff6c3a643f67c64a0a76a04ca69b417531ece8fbf2286ee3d08fb
+CLIENT_URL=https://mybudgeteer-gold.vercel.app
 
 # Frontend (Vercel Environment Variables)
-VITE_API_BASE_URL=https://mybudgeteer-backend.onrender.com
+VITE_API_BASE_URL=https://mybudgeteer-backend.onrender.com/api
 ```
 
 ---
@@ -199,7 +199,7 @@ VITE_API_BASE_URL=https://mybudgeteer-backend.onrender.com
 ## 🚀 SUCCESS!
 
 Once completed, your MyBudgeteer application will be live at:
-- **Frontend**: `https://mybudgeteer.vercel.app`
+- **Frontend**: `https://mybudgeteer-gold.vercel.app`
 - **Backend API**: `https://mybudgeteer-backend.onrender.com`
 - **Health Check**: `https://mybudgeteer-backend.onrender.com/api/health`
 
