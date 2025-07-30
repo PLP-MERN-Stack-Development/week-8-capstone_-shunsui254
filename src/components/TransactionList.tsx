@@ -1,3 +1,28 @@
+/**
+ * TransactionList Component - Comprehensive Transaction Management Interface
+ * 
+ * This component provides a full-featured transaction management interface
+ * with search, filtering, and display capabilities for user financial data.
+ * 
+ * Features:
+ * - Real-time transaction search and filtering
+ * - Multi-currency transaction display with conversion
+ * - Responsive transaction cards with visual indicators
+ * - Empty state handling for new users
+ * - Demo data integration for demonstration purposes
+ * - Category-based transaction organization
+ * - Amount formatting with currency symbols
+ * 
+ * Data Flow:
+ * - Fetches transactions from demo data or API
+ * - Applies search filters in real-time
+ * - Converts amounts to user's preferred currency
+ * - Displays transactions in chronological order
+ * 
+ * @author Cecil Bezalel
+ * @version 1.0.0
+ */
+
 import { useState } from "react";
 import { Search, Filter, ArrowUpRight, ArrowDownLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,23 +34,40 @@ import { AddTransactionDialog } from "@/components/AddTransactionDialog";
 import { demoTransactions } from "@/data/demoTransactions";
 import { isDemoAccount, isNewUser } from "@/lib/userUtils";
 
+/**
+ * Transaction Data Structure
+ * Defines the shape of transaction objects used throughout the application
+ */
 interface Transaction {
-  id: string;
-  type: "income" | "expense";
-  amount: number;
-  description: string;
-  category: string;
-  date: string;
-  currency?: string; // Default to USD if not specified
+  id: string;                    // Unique transaction identifier
+  type: "income" | "expense";    // Transaction type for categorization
+  amount: number;                // Transaction amount in original currency
+  description: string;           // User-provided transaction description
+  category: string;              // Transaction category for grouping
+  date: string;                  // ISO date string for sorting
+  currency?: string;             // Currency code (defaults to USD)
 }
 
-// Use all demo transactions sorted by date (newest first)
+/**
+ * Mock Transactions Data
+ * Uses demo transactions sorted by date (newest first) for consistent display
+ * In production, this would be replaced by API calls to fetch user's actual transactions
+ */
 const mockTransactions: Transaction[] = demoTransactions
   .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
+/**
+ * Main TransactionList Component
+ * Renders the complete transaction management interface
+ */
 export const TransactionList = () => {
+  // Hooks for currency formatting and conversion
   const { formatAmount, getConvertedAmount } = useCurrency();
+  
+  // Local state for search functionality
   const [searchTerm, setSearchTerm] = useState("");
+  
+  // User state detection for conditional rendering
   const demoUser = isDemoAccount();
   const newUser = isNewUser();
   
