@@ -146,13 +146,15 @@ export const QuickActions = () => {
       <QuickTransactionDialog
         isOpen={showIncomeDialog}
         onClose={() => setShowIncomeDialog(false)}
-        transactionType="income"
+        defaultType="income"
+        title="Add Income"
       />
       
       <QuickTransactionDialog
         isOpen={showExpenseDialog}
         onClose={() => setShowExpenseDialog(false)}
-        transactionType="expense"
+        defaultType="expense"
+        title="Add Expense"
       />
     </>
   );
