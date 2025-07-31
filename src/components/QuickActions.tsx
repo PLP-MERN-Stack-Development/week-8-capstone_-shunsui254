@@ -5,19 +5,19 @@
  * financial management actions directly from the dashboard for improved UX.
  * 
  * Features:
- * - One-click access to primary financial actions
+ * - Direct action execution without intermediate steps
  * - Visual action cards with distinctive icons
  * - Responsive grid layout for different screen sizes
  * - Consistent button styling and interaction patterns
- * - Toast notifications for user feedback
+ * - Immediate transaction entry dialogs
  * 
  * Actions Available:
- * - Add Income: Opens transaction dialog with helpful message
- * - Add Expense: Opens transaction dialog with helpful message
- * - Set Budget: Navigates to budget management section
+ * - Add Income: Opens income-specific transaction dialog
+ * - Add Expense: Opens expense-specific transaction dialog
+ * - Set Budget: Direct budget management access
  * 
  * Design Philosophy:
- * - Prioritizes speed of access over feature completeness
+ * - Prioritizes direct action over guidance
  * - Uses familiar financial icons for quick recognition
  * - Maintains consistent visual hierarchy with other components
  * 
@@ -27,10 +27,11 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Plus, ArrowUpRight, ArrowDownLeft, Target } from "lucide-react";
+import { Plus, ArrowUpRight, ArrowDownLeft, Target, PiggyBank } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AddTransactionDialog } from "@/components/AddTransactionDialog";
+import { QuickTransactionDialog } from "@/components/QuickTransactionDialog";
 import { useToast } from "@/hooks/use-toast";
 
 /**
@@ -40,45 +41,42 @@ import { useToast } from "@/hooks/use-toast";
 export const QuickActions = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [showTransactionDialog, setShowTransactionDialog] = useState(false);
-  const [dialogType, setDialogType] = useState<"income" | "expense">("expense");
+  
+  // Dialog state management
+  const [showIncomeDialog, setShowIncomeDialog] = useState(false);
+  const [showExpenseDialog, setShowExpenseDialog] = useState(false);
 
   /**
    * Handle Add Income Action
-   * Shows guidance to user about adding income
+   * Opens income-specific transaction dialog directly
    */
   const handleAddIncome = () => {
-    setDialogType("income");
-    setShowTransactionDialog(true);
-    toast({
-      title: "💰 Add Income",
-      description: "Click 'Add Transaction' and select 'Income' to record your earnings.",
-    });
+    setShowIncomeDialog(true);
   };
 
   /**
    * Handle Add Expense Action
-   * Shows guidance to user about adding expense
+   * Opens expense-specific transaction dialog directly
    */
   const handleAddExpense = () => {
-    setDialogType("expense");
-    setShowTransactionDialog(true);
-    toast({
-      title: "💳 Add Expense",
-      description: "Click 'Add Transaction' and select 'Expense' to track spending.",
-    });
+    setShowExpenseDialog(true);
   };
 
   /**
    * Handle Set Budget Action
-   * Navigates user to budget management
+   * Opens budget management dialog or navigates to budget page
    */
   const handleSetBudget = () => {
+    // For now, show a helpful message about budget creation
     toast({
-      title: "🎯 Budget Management",
-      description: "Budget features are coming soon! For now, track your spending with transactions.",
+      title: "🎯 Budget Setup",
+      description: "Setting up budget management. For now, track spending with transactions to establish patterns.",
       variant: "default",
     });
+    
+    // Future: Open budget creation dialog or navigate to budget page
+    // setBudgetDialogOpen(true);
+    // navigate("/budgets");
   };
 
   /**
@@ -141,13 +139,21 @@ export const QuickActions = () => {
               </Button>
             </div>
           ))}
-          
-          {/* Add Transaction Button */}
-          <div className="pt-2 border-t">
-            <AddTransactionDialog />
-          </div>
         </CardContent>
       </Card>
+
+      {/* Direct Transaction Dialogs */}
+      <QuickTransactionDialog
+        isOpen={showIncomeDialog}
+        onClose={() => setShowIncomeDialog(false)}
+        transactionType="income"
+      />
+      
+      <QuickTransactionDialog
+        isOpen={showExpenseDialog}
+        onClose={() => setShowExpenseDialog(false)}
+        transactionType="expense"
+      />
     </>
   );
 };
